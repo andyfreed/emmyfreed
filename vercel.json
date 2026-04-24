@@ -1,5 +1,15 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "rewrites": [
+    {
+      "source": "/slimemaker",
+      "destination": "https://slime-maker.vercel.app"
+    },
+    {
+      "source": "/slimemaker/:path*",
+      "destination": "https://slime-maker.vercel.app/:path*"
+    }
+  ]
 }
