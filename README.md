@@ -28,23 +28,32 @@ separate repo: <https://github.com/andyfreed/slime-maker> (Vite + React + Three.
 
 ### Updating the Slime Maker
 
-1. Make your changes in the `andyfreed/slime-maker` repo and commit them there.
-2. Build with Vite, passing the `/slimemaker/` base path so asset URLs resolve
-   correctly when served from a subdirectory:
-   ```bash
-   git clone https://github.com/andyfreed/slime-maker.git
-   cd slime-maker
-   npm install
-   npx vite build --base=/slimemaker/
-   ```
-3. Copy the resulting `dist/` contents into this repo at `slimemaker/`
-   (replacing the existing files):
-   ```bash
-   rm -rf /path/to/emmyfreed/slimemaker
-   cp -R dist /path/to/emmyfreed/slimemaker
-   ```
-4. Commit and push this repo. Vercel will redeploy
-   `https://emmyfreed.com/slimemaker/` with the new build.
+A local checkout of the slime-maker source lives alongside this site at
+`slime-maker-src/` (gitignored — it's a separate repo, not part of this one).
+From the emmyfreed repo root:
+
+```bash
+# 1. Pull latest source (or edit + commit + push from inside slime-maker-src).
+cd slime-maker-src
+git pull
+
+# 2. Build with the /slimemaker/ base path so asset URLs resolve correctly
+#    when served from a subdirectory.
+npx vite build --base=/slimemaker/
+
+# 3. Replace the committed build in this repo with the fresh output.
+cd ..
+rm -rf slimemaker
+cp -R slime-maker-src/dist slimemaker
+
+# 4. Commit and push this repo. Vercel redeploys emmyfreed.com/slimemaker/.
+git add slimemaker
+git commit -m "Update slime-maker build"
+git push
+```
+
+If `slime-maker-src/` doesn't exist locally, clone it first:
+`git clone https://github.com/andyfreed/slime-maker.git slime-maker-src && (cd slime-maker-src && npm install)`
 
 Do **not** convert the main Emmy site to React/Vite, and do **not** link to
 `slime-maker.vercel.app` or any Vercel dashboard URL — everything is served

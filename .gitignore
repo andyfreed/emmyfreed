@@ -2,3 +2,7 @@ node_modules/
 .DS_Store
 .vercel
 *.log
+
+# Local checkout of the slime-maker source (separate repo — see README).
+# Kept here as a convenience for rebuilding; not part of this site's deploy.
+slime-maker-src/
