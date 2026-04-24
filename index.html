@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Emmy is Awesome ✨</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@400;600;700;800&family=Caveat:wght@500;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Decorative paper grain -->
+<div class="paper" aria-hidden="true"></div>
+
+<!-- Nav -->
+<nav class="nav">
+  <a href="#home" class="nav-logo">
+    <span class="nav-logo-badge">E</span>
+    <span>emmy<span class="nav-logo-dot">.</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#home" data-nav="home">Home</a></li>
+    <li><a href="#about" data-nav="about">About Me</a></li>
+    <li><a href="#pictures" data-nav="pictures">Pictures</a></li>
+    <li><a href="#puppies" data-nav="puppies">Puppies</a></li>
+    <li><a href="#slime" data-nav="slime">Slime Maker</a></li>
+  </ul>
+  <button class="nav-toggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ============================================= HOME ============================================= -->
+<section id="home" class="page page-home" data-screen-label="01 Home">
+  <!-- floating stickers -->
+  <div class="float-stickers" aria-hidden="true">
+    <svg class="st st-star" viewBox="0 0 100 100"><path d="M50 5 L61 38 L95 38 L67 58 L78 92 L50 72 L22 92 L33 58 L5 38 L39 38 Z" fill="#FFD23F" stroke="#1a1a2e" stroke-width="4" stroke-linejoin="round"/></svg>
+    <svg class="st st-heart" viewBox="0 0 100 100"><path d="M50 85 C 10 60 10 25 30 25 C 42 25 50 35 50 35 C 50 35 58 25 70 25 C 90 25 90 60 50 85 Z" fill="#FF3D7F" stroke="#1a1a2e" stroke-width="4" stroke-linejoin="round"/></svg>
+    <svg class="st st-sparkle" viewBox="0 0 100 100"><path d="M50 10 C 52 40 60 48 90 50 C 60 52 52 60 50 90 C 48 60 40 52 10 50 C 40 48 48 40 50 10 Z" fill="#7DD3FC" stroke="#1a1a2e" stroke-width="4" stroke-linejoin="round"/></svg>
+    <svg class="st st-flower" viewBox="0 0 100 100">
+      <circle cx="50" cy="22" r="15" fill="#C084FC" stroke="#1a1a2e" stroke-width="4"/>
+      <circle cx="78" cy="50" r="15" fill="#C084FC" stroke="#1a1a2e" stroke-width="4"/>
+      <circle cx="50" cy="78" r="15" fill="#C084FC" stroke="#1a1a2e" stroke-width="4"/>
+      <circle cx="22" cy="50" r="15" fill="#C084FC" stroke="#1a1a2e" stroke-width="4"/>
+      <circle cx="50" cy="50" r="13" fill="#FFD23F" stroke="#1a1a2e" stroke-width="4"/>
+    </svg>
+    <svg class="st st-rainbow" viewBox="0 0 120 70">
+      <path d="M10 60 A 50 50 0 0 1 110 60" fill="none" stroke="#FF3D7F" stroke-width="10"/>
+      <path d="M22 60 A 38 38 0 0 1 98 60" fill="none" stroke="#FFD23F" stroke-width="10"/>
+      <path d="M34 60 A 26 26 0 0 1 86 60" fill="none" stroke="#7DD3FC" stroke-width="10"/>
+      <path d="M10 60 A 50 50 0 0 1 110 60 M22 60 A 38 38 0 0 1 98 60 M34 60 A 26 26 0 0 1 86 60" fill="none" stroke="#1a1a2e" stroke-width="3"/>
+    </svg>
+    <svg class="st st-cloud" viewBox="0 0 140 80">
+      <path d="M30 60 C 10 60 10 35 30 35 C 30 15 65 15 70 35 C 85 20 115 30 115 50 C 130 50 130 65 115 65 L 30 65 Z" fill="#fff" stroke="#1a1a2e" stroke-width="4" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <div class="home-inner">
+    <p class="home-kicker">
+      <span class="home-kicker-dot"></span>
+      welcome to my website
+    </p>
+    <h1 class="home-title" aria-label="Emmy is awesome">
+      <span class="word w1">Emmy</span>
+      <span class="word w2">is</span>
+      <span class="word w3">Awesome</span>
+      <svg class="home-underline" viewBox="0 0 400 20" preserveAspectRatio="none"><path d="M5 12 Q 100 2, 200 10 T 395 8" fill="none" stroke="#FF3D7F" stroke-width="6" stroke-linecap="round"/></svg>
+    </h1>
+    <p class="home-sub">hi! i'm emmy and this is my website. there's pictures of me, my puppies, stuff about me, AND a slime maker i made. scroll down!! ⬇</p>
+
+    <div class="home-ctas">
+      <a href="#slime" class="btn btn-primary">make some slime →</a>
+      <a href="#about" class="btn btn-ghost">meet emmy</a>
+    </div>
+
+    <!-- scroll hint -->
+    <div class="scroll-hint" aria-hidden="true">
+      <span>scroll</span>
+      <svg viewBox="0 0 24 40"><rect x="2" y="2" width="20" height="36" rx="10" fill="none" stroke="#1a1a2e" stroke-width="3"/><circle cx="12" cy="12" r="3" fill="#1a1a2e"><animate attributeName="cy" values="12;24;12" dur="1.8s" repeatCount="indefinite"/></circle></svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================= ABOUT ============================================= -->
+<section id="about" class="page page-about" data-screen-label="02 About">
+  <div class="section-head reveal">
+    <span class="tape tape-pink"></span>
+    <h2 class="section-title">About Me</h2>
+    <p class="section-dek">the important stuff you should know</p>
+  </div>
+
+  <div class="about-grid">
+    <!-- Big polaroid -->
+    <div class="about-photo reveal" style="--r: -3deg">
+      <div class="polaroid">
+        <div class="polaroid-img" style="background: linear-gradient(135deg,#FFE5EC,#FFD6A5);">
+          <svg viewBox="0 0 200 200" class="placeholder-girl">
+            <circle cx="100" cy="85" r="48" fill="#FFD6A5" stroke="#1a1a2e" stroke-width="5"/>
+            <path d="M52 85 Q 50 40 100 38 Q 150 40 148 85 Q 148 95 140 98 Q 135 75 100 75 Q 65 75 60 98 Q 52 95 52 85 Z" fill="#8B4513" stroke="#1a1a2e" stroke-width="5" stroke-linejoin="round"/>
+            <circle cx="85" cy="85" r="4" fill="#1a1a2e"/>
+            <circle cx="115" cy="85" r="4" fill="#1a1a2e"/>
+            <path d="M88 105 Q 100 115 112 105" fill="none" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="75" cy="98" r="6" fill="#FF99B0" opacity="0.7"/>
+            <circle cx="125" cy="98" r="6" fill="#FF99B0" opacity="0.7"/>
+            <path d="M50 200 L 50 160 Q 100 140 150 160 L 150 200 Z" fill="#C084FC" stroke="#1a1a2e" stroke-width="5"/>
+          </svg>
+        </div>
+        <p class="polaroid-caption">that's me!</p>
+      </div>
+      <span class="tape tape-yellow tl"></span>
+    </div>
+
+    <!-- Bio card -->
+    <div class="bio-card reveal" style="--r: 1.5deg">
+      <h3>hi, i'm Emmy!</h3>
+      <p>i am <span class="hl hl-pink">8 years old</span> and i live with my family and my <a href="#puppies" class="inline-link">two puppies</a>. i love art, slime, and riding my bike really fast down the hill behind our house.</p>
+      <p>when i grow up i want to be a <span class="hl hl-yellow">vet AND an artist</span> so i can paint puppies all day. i made this website myself (with a little help).</p>
+    </div>
+
+    <!-- Favorites grid -->
+    <div class="favorites reveal">
+      <h3 class="fav-title">my favorite things</h3>
+      <div class="fav-grid">
+        <div class="fav" style="--c:#FFD6A5; --r:-2deg"><span class="fav-emoji">🍕</span><span class="fav-label">food</span><span class="fav-value">pizza</span></div>
+        <div class="fav" style="--c:#B4E4B4; --r:1deg"><span class="fav-emoji">🎨</span><span class="fav-label">hobby</span><span class="fav-value">painting</span></div>
+        <div class="fav" style="--c:#FFB5D8; --r:-1.5deg"><span class="fav-emoji">🐶</span><span class="fav-label">animal</span><span class="fav-value">puppies</span></div>
+        <div class="fav" style="--c:#B5DEFF; --r:2deg"><span class="fav-emoji">💜</span><span class="fav-label">color</span><span class="fav-value">purple</span></div>
+        <div class="fav" style="--c:#E7C6FF; --r:-1deg"><span class="fav-emoji">📚</span><span class="fav-label">book</span><span class="fav-value">Dog Man</span></div>
+        <div class="fav" style="--c:#FFF1A5; --r:1.5deg"><span class="fav-emoji">🏫</span><span class="fav-label">subject</span><span class="fav-value">art class</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================= PICTURES ============================================= -->
+<section id="pictures" class="page page-pictures" data-screen-label="03 Pictures">
+  <div class="section-head reveal">
+    <span class="tape tape-mint"></span>
+    <h2 class="section-title">My Pictures</h2>
+    <p class="section-dek">tap any picture to see it big!</p>
+  </div>
+
+  <div class="sticker-gallery">
+    <!-- 9 placeholder photos with different playful backgrounds -->
+    <figure class="photo reveal" style="--r:-4deg" data-caption="me at the beach!">
+      <div class="photo-inner" style="background:linear-gradient(160deg,#7DD3FC 0%, #FFD23F 100%);">
+        <svg viewBox="0 0 200 200"><circle cx="150" cy="50" r="25" fill="#FFE5A5"/><path d="M0 140 Q 100 110 200 140 L 200 200 L 0 200 Z" fill="#F4E4BC"/><path d="M0 155 Q 100 140 200 160 L 200 200 L 0 200 Z" fill="#D9B382" opacity="0.5"/></svg>
+      </div>
+      <figcaption>beach day 🌊</figcaption>
+    </figure>
+
+    <figure class="photo reveal" style="--r:2deg" data-caption="my birthday cake">
+      <div class="photo-inner" style="background:linear-gradient(160deg,#FFB5D8,#FF3D7F);">
+        <svg viewBox="0 0 200 200"><rect x="50" y="100" width="100" height="60" fill="#FFE5A5" stroke="#1a1a2e" stroke-width="4"/><rect x="60" y="80" width="80" height="25" fill="#FFB5D8" stroke="#1a1a2e" stroke-width="4"/><rect x="95" y="55" width="10" height="30" fill="#FFD23F" stroke="#1a1a2e" stroke-width="3"/><path d="M100 55 Q 95 45 100 40 Q 105 45 100 55 Z" fill="#FF3D7F"/></svg>
+      </div>
+      <figcaption>8th birthday! 🎂</figcaption>
+    </figure>
+
+    <figure class="photo reveal" style="--r:-1.5deg" data-caption="art i made">
+      <div class="photo-inner" style="background:linear-gradient(160deg,#E7C6FF,#C084FC);">
+        <svg viewBox="0 0 200 200"><rect x="30" y="30" width="140" height="140" fill="#fff" stroke="#1a1a2e" stroke-width="4"/><circle cx="80" cy="80" r="20" fill="#FF3D7F"/><circle cx="130" cy="100" r="15" fill="#FFD23F"/><rect x="60" y="120" width="80" height="30" fill="#7DD3FC"/><path d="M50 50 L 160 150" stroke="#1a1a2e" stroke-width="3"/></svg>
+      </div>
+      <figcaption>my painting 🎨</figcaption>
+    </figure>
+
+    <figure class="photo reveal" style="--r:3deg" data-caption="puppy snuggles">
+      <div class="photo-inner" style="background:linear-gradient(160deg,#FFE5A5,#FFB584);">
+        <svg viewBox="0 0 200 200"><ellipse cx="100" cy="120" rx="60" ry="45" fill="#D9B382" stroke="#1a1a2e" stroke-width="4"/><ellipse cx="70" cy="85" rx="20" ry="30" fill="#D9B382" stroke="#1a1a2e" stroke-width="4"/><ellipse cx="130" cy="85" rx="20" ry="30" fill="#D9B382" stroke="#1a1a2e" stroke-width="4"/><circle cx="85" cy="115" r="4" fill="#1a1a2e"/><circle cx="115" cy="115" r="4" fill="#1a1a2e"/><ellipse cx="100" cy="130" rx="7" ry="5" fill="#1a1a2e"/><path d="M90 138 Q 100 148 110 138" fill="none" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round"/></svg>
+      </div>
+      <figcaption>snuggles 🐶</figcaption>
+    </figure>
+
+    <figure class="photo reveal" style="--r:-2.5deg" data-caption="me and my bestie">
+      <div class="photo-inner" style="background:linear-gradient(160deg,#B4E4B4,#7DD3FC);">
+        <svg viewBox="0 0 200 200"><circle cx="70" cy="80" r="28" fill="#FFD6A5" stroke="#1a1a2e" stroke-width="4"/><circle cx="130" cy="80" r="28" fill="#FFD6A5" stroke="#1a1a2e" stroke-width="4"/><path d="M35 200 Q 35 130 70 130 Q 105 130 105 200 Z" fill="#FF3D7F" stroke="#1a1a2e" stroke-width="4"/><path d="M95 200 Q 95 130 130 130 Q 165 130 165 200 Z" fill="#C084FC" stroke="#1a1a2e" stroke-width="4"/><circle cx="63" cy="78" r="3" fill="#1a1a2e"/><circle cx="77" cy="78" r="3" fill="#1a1a2e"/><circle cx="123" cy="78" r="3" fill="#1a1a2e"/><circle cx="137" cy="78" r="3" fill="#1a1a2e"/></svg>
+      </div>
+      <figcaption>best friends 💕</figcaption>
+    </figure>
+
+    <figure class="photo reveal" style="--r:1.8deg" data-caption="halloween!">
+      <div class="photo-inner" style="background:linear-gradient(160deg,#C084FC,#1a1a2e);">
+        <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="55" fill="#FF8C42" stroke="#1a1a2e" stroke-width="4"/><polygon points="80,85 95,95 70,95" fill="#1a1a2e"/><polygon points="120,85 130,95 105,95" fill="#1a1a2e"/><path d="M70 120 L 80 115 L 90 120 L 100 115 L 110 120 L 120 115 L 130 120 L 125 130 L 75 130 Z" fill="#1a1a2e"/><rect x="95" y="40" width="10" height="15" fill="#2d5016"/></svg>
+      </div>
+      <figcaption>halloween 🎃</figcaption>
+    </figure>
+
+    <figure class="photo reveal" style="--r:-3deg" data-caption="ice cream day">
+      <div class="photo-inner" style="background:linear-gradient(160deg,#FFB5D8,#FFF1A5);">
+        <svg viewBox="0 0 200 200"><path d="M70 90 L 130 90 L 110 180 L 90 180 Z" fill="#D9B382" stroke="#1a1a2e" stroke-width="4"/><circle cx="85" cy="80" r="22" fill="#FFB5D8" stroke="#1a1a2e" stroke-width="4"/><circle cx="115" cy="80" r="22" fill="#FFF1A5" stroke="#1a1a2e" stroke-width="4"/><circle cx="100" cy="55" r="22" fill="#B4E4B4" stroke="#1a1a2e" stroke-width="4"/><circle cx="80" cy="65" r="3" fill="#FF3D7F"/><circle cx="115" cy="50" r="3" fill="#FF3D7F"/><circle cx="95" cy="85" r="3" fill="#FF3D7F"/></svg>
+      </div>
+      <figcaption>ice cream!! 🍦</figcaption>
+    </figure>
+
+    <figure class="photo reveal" style="--r:2.5deg" data-caption="bike ride">
+      <div class="photo-inner" style="background:linear-gradient(160deg,#7DD3FC,#B4E4B4);">
+        <svg viewBox="0 0 200 200"><circle cx="55" cy="140" r="28" fill="none" stroke="#1a1a2e" stroke-width="5"/><circle cx="145" cy="140" r="28" fill="none" stroke="#1a1a2e" stroke-width="5"/><path d="M55 140 L 100 90 L 145 140 M 100 90 L 110 70 M 80 140 L 120 140" stroke="#1a1a2e" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="110" cy="65" r="8" fill="#FF3D7F" stroke="#1a1a2e" stroke-width="3"/></svg>
+      </div>
+      <figcaption>zoom 🚴‍♀️</figcaption>
+    </figure>
+
+    <figure class="photo reveal" style="--r:-1deg" data-caption="sleepover squad">
+      <div class="photo-inner" style="background:linear-gradient(160deg,#FFD23F,#FF3D7F);">
+        <svg viewBox="0 0 200 200"><path d="M40 160 L 40 100 Q 40 80 60 80 L 140 80 Q 160 80 160 100 L 160 160 Z" fill="#E7C6FF" stroke="#1a1a2e" stroke-width="4"/><rect x="30" y="155" width="140" height="15" fill="#C084FC" stroke="#1a1a2e" stroke-width="4"/><circle cx="75" cy="115" r="12" fill="#FFD6A5" stroke="#1a1a2e" stroke-width="3"/><circle cx="125" cy="115" r="12" fill="#FFD6A5" stroke="#1a1a2e" stroke-width="3"/><path d="M60 60 L 80 80 M 120 80 L 140 60" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round"/></svg>
+      </div>
+      <figcaption>sleepover ✨</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ============================================= PUPPIES ============================================= -->
+<section id="puppies" class="page page-puppies" data-screen-label="04 Puppies">
+  <div class="section-head reveal">
+    <span class="tape tape-lav"></span>
+    <h2 class="section-title">My Puppies 🐾</h2>
+    <p class="section-dek">meet the goodest girls ever</p>
+  </div>
+
+  <div class="puppies-grid">
+    <article class="puppy-card reveal" style="--bg:#FFE5EC; --r:-1.5deg">
+      <div class="puppy-portrait">
+        <svg viewBox="0 0 200 200">
+          <ellipse cx="100" cy="130" rx="65" ry="55" fill="#D9B382" stroke="#1a1a2e" stroke-width="5"/>
+          <path d="M55 90 Q 45 50 65 55 Q 75 75 70 100 Z" fill="#A67B4A" stroke="#1a1a2e" stroke-width="5" stroke-linejoin="round"/>
+          <path d="M145 90 Q 155 50 135 55 Q 125 75 130 100 Z" fill="#A67B4A" stroke="#1a1a2e" stroke-width="5" stroke-linejoin="round"/>
+          <circle cx="80" cy="120" r="5" fill="#1a1a2e"/>
+          <circle cx="120" cy="120" r="5" fill="#1a1a2e"/>
+          <ellipse cx="100" cy="140" rx="10" ry="7" fill="#1a1a2e"/>
+          <path d="M88 152 Q 100 163 112 152" fill="none" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round"/>
+          <path d="M100 147 L 100 152" stroke="#1a1a2e" stroke-width="3"/>
+          <circle cx="145" cy="70" r="8" fill="#FF3D7F" stroke="#1a1a2e" stroke-width="3"/>
+        </svg>
+      </div>
+      <h3 class="puppy-name">Biscuit</h3>
+      <p class="puppy-breed">golden retriever • 3 yrs</p>
+      <ul class="puppy-facts">
+        <li><strong>loves:</strong> belly rubs, tennis balls, cheese</li>
+        <li><strong>trick:</strong> shakes paw (most of the time)</li>
+        <li><strong>fun fact:</strong> snores louder than dad</li>
+      </ul>
+      <span class="puppy-badge">good girl ⭐</span>
+    </article>
+
+    <article class="puppy-card reveal" style="--bg:#E7C6FF; --r:1.5deg">
+      <div class="puppy-portrait">
+        <svg viewBox="0 0 200 200">
+          <ellipse cx="100" cy="130" rx="65" ry="55" fill="#2a2a2a" stroke="#1a1a2e" stroke-width="5"/>
+          <path d="M60 85 Q 50 50 75 60 Q 80 80 75 100 Z" fill="#2a2a2a" stroke="#1a1a2e" stroke-width="5" stroke-linejoin="round"/>
+          <path d="M140 85 Q 150 50 125 60 Q 120 80 125 100 Z" fill="#2a2a2a" stroke="#1a1a2e" stroke-width="5" stroke-linejoin="round"/>
+          <ellipse cx="100" cy="135" rx="25" ry="20" fill="#D9B382"/>
+          <circle cx="80" cy="115" r="5" fill="#FFD23F"/>
+          <circle cx="120" cy="115" r="5" fill="#FFD23F"/>
+          <ellipse cx="100" cy="135" rx="9" ry="6" fill="#1a1a2e"/>
+          <path d="M88 148 Q 100 158 112 148" fill="none" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round"/>
+          <circle cx="50" cy="70" r="8" fill="#7DD3FC" stroke="#1a1a2e" stroke-width="3"/>
+        </svg>
+      </div>
+      <h3 class="puppy-name">Luna</h3>
+      <p class="puppy-breed">rescue mutt • 5 yrs</p>
+      <ul class="puppy-facts">
+        <li><strong>loves:</strong> naps, squeaky toys, emmy</li>
+        <li><strong>trick:</strong> high five & roll over</li>
+        <li><strong>fun fact:</strong> scared of the vacuum 😱</li>
+      </ul>
+      <span class="puppy-badge">princess 👑</span>
+    </article>
+  </div>
+
+  <!-- paw prints -->
+  <div class="paws" aria-hidden="true">
+    <svg viewBox="0 0 60 60"><circle cx="30" cy="38" r="14" fill="#1a1a2e"/><circle cx="12" cy="22" r="6" fill="#1a1a2e"/><circle cx="48" cy="22" r="6" fill="#1a1a2e"/><circle cx="20" cy="8" r="5" fill="#1a1a2e"/><circle cx="40" cy="8" r="5" fill="#1a1a2e"/></svg>
+    <svg viewBox="0 0 60 60"><circle cx="30" cy="38" r="14" fill="#1a1a2e"/><circle cx="12" cy="22" r="6" fill="#1a1a2e"/><circle cx="48" cy="22" r="6" fill="#1a1a2e"/><circle cx="20" cy="8" r="5" fill="#1a1a2e"/><circle cx="40" cy="8" r="5" fill="#1a1a2e"/></svg>
+    <svg viewBox="0 0 60 60"><circle cx="30" cy="38" r="14" fill="#1a1a2e"/><circle cx="12" cy="22" r="6" fill="#1a1a2e"/><circle cx="48" cy="22" r="6" fill="#1a1a2e"/><circle cx="20" cy="8" r="5" fill="#1a1a2e"/><circle cx="40" cy="8" r="5" fill="#1a1a2e"/></svg>
+    <svg viewBox="0 0 60 60"><circle cx="30" cy="38" r="14" fill="#1a1a2e"/><circle cx="12" cy="22" r="6" fill="#1a1a2e"/><circle cx="48" cy="22" r="6" fill="#1a1a2e"/><circle cx="20" cy="8" r="5" fill="#1a1a2e"/><circle cx="40" cy="8" r="5" fill="#1a1a2e"/></svg>
+  </div>
+</section>
+
+<!-- ============================================= SLIME ============================================= -->
+<section id="slime" class="page page-slime" data-screen-label="05 Slime Maker">
+  <div class="section-head reveal">
+    <span class="tape tape-yellow"></span>
+    <h2 class="section-title">Slime Maker ✨</h2>
+    <p class="section-dek">i made a whole game for this!!</p>
+  </div>
+
+  <div class="slime-cta reveal">
+    <!-- Decorative jar -->
+    <div class="slime-cta-jar" aria-hidden="true">
+      <svg viewBox="0 0 280 340" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <clipPath id="jarClip">
+            <path d="M60 110 Q 60 100 70 100 L 210 100 Q 220 100 220 110 L 220 300 Q 220 320 200 320 L 80 320 Q 60 320 60 300 Z"/>
+          </clipPath>
+        </defs>
+        <rect x="55" y="70" width="170" height="35" rx="6" fill="#E7C6FF" stroke="#1a1a2e" stroke-width="5"/>
+        <rect x="55" y="70" width="170" height="10" fill="#C084FC" stroke="#1a1a2e" stroke-width="5"/>
+        <path d="M60 110 Q 60 100 70 100 L 210 100 Q 220 100 220 110 L 220 300 Q 220 320 200 320 L 80 320 Q 60 320 60 300 Z" fill="#fff" stroke="#1a1a2e" stroke-width="5"/>
+        <g clip-path="url(#jarClip)">
+          <path d="M 40 200 Q 80 180 140 195 Q 200 210 240 195 L 240 340 L 40 340 Z" fill="#FF3D7F">
+            <animate attributeName="d"
+              values="M 40 200 Q 80 180 140 195 Q 200 210 240 195 L 240 340 L 40 340 Z;
+                      M 40 210 Q 90 190 140 205 Q 190 220 240 205 L 240 340 L 40 340 Z;
+                      M 40 200 Q 80 180 140 195 Q 200 210 240 195 L 240 340 L 40 340 Z"
+              dur="4s" repeatCount="indefinite"/>
+          </path>
+          <ellipse cx="110" cy="230" rx="30" ry="8" fill="#fff" opacity="0.35"/>
+          <circle cx="90" cy="250" r="3" fill="#FFD23F"/>
+          <circle cx="160" cy="270" r="3" fill="#FFD23F"/>
+          <circle cx="130" cy="300" r="3" fill="#FFD23F"/>
+          <circle cx="200" cy="240" r="3" fill="#FFD23F"/>
+          <circle cx="75" cy="290" r="3" fill="#fff"/>
+          <circle cx="180" cy="310" r="3" fill="#fff"/>
+        </g>
+        <path d="M 75 130 L 75 290" stroke="#fff" stroke-width="8" opacity="0.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <div class="slime-cta-copy">
+      <p class="slime-cta-kicker">✨ play the game ✨</p>
+      <h3 class="slime-cta-title">my <span class="hl hl-pink">slime maker</span> is its own whole thing!</h3>
+      <p class="slime-cta-text">pick a color, add glitter, toss in charms, and make the coolest slime ever. click the button to play!</p>
+      <!-- TODO: replace # with the real link to your slime game when it's ready -->
+      <a href="#" class="btn btn-primary btn-big slime-cta-btn">🧪 open slime maker →</a>
+      <p class="slime-cta-note">(coming soon — we're still building it!)</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================= FOOTER ============================================= -->
+<footer class="footer">
+  <div class="footer-inner">
+    <p class="footer-sig">made with <span class="heart">💖</span> by <strong>emmy</strong> (with a little help from mom)</p>
+    <p class="footer-year">© 2026 • emmy is awesome dot com</p>
+  </div>
+</footer>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" role="dialog" aria-hidden="true">
+  <button class="lightbox-close" aria-label="Close">✕</button>
+  <div class="lightbox-content"></div>
+</div>
+
+
+<script>
+// ============ NAV ============
+const toggle = document.querySelector('.nav-toggle');
+const navLinksEl = document.querySelector('.nav-links');
+toggle?.addEventListener('click', () => {
+  toggle.classList.toggle('open');
+  navLinksEl.classList.toggle('open');
+});
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => {
+    toggle?.classList.remove('open');
+    navLinksEl?.classList.remove('open');
+  });
+});
+
+// Active section highlighting
+const sections = document.querySelectorAll('.page');
+const navLinkEls = document.querySelectorAll('.nav-links a');
+const activeObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      navLinkEls.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + id));
+    }
+  });
+}, { rootMargin: '-40% 0px -50% 0px' });
+sections.forEach(s => activeObserver.observe(s));
+
+// ============ SCROLL REVEAL ============
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// ============ LIGHTBOX ============
+const lightbox = document.getElementById('lightbox');
+const lightboxContent = lightbox.querySelector('.lightbox-content');
+const lightboxClose = lightbox.querySelector('.lightbox-close');
+document.querySelectorAll('.photo').forEach(photo => {
+  photo.addEventListener('click', () => {
+    lightboxContent.innerHTML = photo.innerHTML;
+    lightbox.classList.add('open');
+    lightbox.setAttribute('aria-hidden', 'false');
+  });
+});
+function closeLightbox() {
+  lightbox.classList.remove('open');
+  lightbox.setAttribute('aria-hidden', 'true');
+}
+lightboxClose.addEventListener('click', closeLightbox);
+lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+</script>
+</body>
+</html>
