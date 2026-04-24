@@ -1,6 +1,6 @@
 # Emmy is Awesome ✨
 
-Emmy's personal website — a playful 5-section portfolio for her pictures, about-me, puppies, and slime-maker game link.
+Emmy's personal website — a playful portfolio for her pictures, about-me, and slime-maker game link.
 
 ## Built with
 Plain HTML + CSS + a sprinkle of JavaScript. No build step, no dependencies, no framework.
@@ -15,11 +15,9 @@ Just open `index.html` in a browser. That's it.
 4. Point your custom domain at the Vercel deployment via the project settings.
 
 ## Structure
-- `index.html` — the whole site (one page, 5 scroll sections + sticky nav)
+- `index.html` — the whole site (one page, scroll sections + sticky nav)
 - `styles.css` — all the styling
 - No build, no bundler, no package.json needed
 
 ## TODO
-- Swap placeholder SVG portraits in `My Pictures` and `Puppies` for real photos (replace the inline `<svg>` inside each `.photo-inner` / `.puppy-portrait` with `<img src="...">`).
-- Update the Slime Maker link in the `#slime` section (`href="#"` → actual game URL) once Emmy's game is deployed.
-- Update names/ages/facts for real puppy info in the `#puppies` section.
+- Swap placeholder SVG portraits in `My Pictures` for real photos (replace the inline `<svg>` inside each `.photo-inner` with `<img src="...">`).
