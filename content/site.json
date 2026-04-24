@@ -1,0 +1,14 @@
+{
+  "home": {
+    "kicker": "welcome to my website",
+    "subtitle": "hi! i'm emmy and this is my website. there's pictures of me, stuff about me, AND a slime maker i made. scroll down!! ⬇",
+    "ctaPrimary": "make some slime →",
+    "ctaGhost": "meet emmy"
+  },
+  "about": {
+    "heading": "hi, i'm Emmy!"
+  },
+  "footer": {
+    "year": "© 2026 • emmy is awesome dot com"
+  }
+}

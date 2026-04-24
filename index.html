@@ -59,7 +59,7 @@
   <div class="home-inner">
     <p class="home-kicker">
       <span class="home-kicker-dot"></span>
-      welcome to my website
+      <span data-cms="home.kicker">welcome to my website</span>
     </p>
     <h1 class="home-title" aria-label="Emmy is awesome">
       <span class="word w1">Emmy</span>
@@ -67,11 +67,11 @@
       <span class="word w3">Awesome</span>
       <svg class="home-underline" viewBox="0 0 400 20" preserveAspectRatio="none"><path d="M5 12 Q 100 2, 200 10 T 395 8" fill="none" stroke="#FF3D7F" stroke-width="6" stroke-linecap="round"/></svg>
     </h1>
-    <p class="home-sub">hi! i'm emmy and this is my website. there's pictures of me, my puppies, stuff about me, AND a slime maker i made. scroll down!! ⬇</p>
+    <p class="home-sub" data-cms="home.subtitle">hi! i'm emmy and this is my website. there's pictures of me, stuff about me, AND a slime maker i made. scroll down!! ⬇</p>
 
     <div class="home-ctas">
-      <a href="/slimemaker" class="btn btn-primary">make some slime →</a>
-      <a href="#about" class="btn btn-ghost">meet emmy</a>
+      <a href="/slimemaker" class="btn btn-primary" data-cms="home.ctaPrimary">make some slime →</a>
+      <a href="#about" class="btn btn-ghost" data-cms="home.ctaGhost">meet emmy</a>
     </div>
 
     <!-- scroll hint -->
@@ -113,7 +113,7 @@
 
     <!-- Bio card -->
     <div class="bio-card reveal" style="--r: 1.5deg">
-      <h3>hi, i'm Emmy!</h3>
+      <h3 data-cms="about.heading">hi, i'm Emmy!</h3>
       <p>i am <span class="hl hl-pink">8 years old</span> and i live with my family. i love art, slime, and riding my bike really fast down the hill behind our house.</p>
       <p>when i grow up i want to be a <span class="hl hl-yellow">vet AND an artist</span> so i can paint puppies all day. i made this website myself (with a little help).</p>
     </div>
@@ -261,7 +261,7 @@
 <footer class="footer">
   <div class="footer-inner">
     <p class="footer-sig">made with <span class="heart">💖</span> by <strong>emmy</strong></p>
-    <p class="footer-year">© 2026 • emmy is awesome dot com</p>
+    <p class="footer-year" data-cms="footer.year">© 2026 • emmy is awesome dot com</p>
   </div>
 </footer>
 
@@ -329,6 +329,20 @@ function closeLightbox() {
 lightboxClose.addEventListener('click', closeLightbox);
 lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
+
+// ============ CMS CONTENT ============
+// Pulls editable text from /content/site.json (managed via Decap CMS at /admin).
+fetch('/content/site.json', { cache: 'no-cache' })
+  .then(r => r.ok ? r.json() : null)
+  .then(data => {
+    if (!data) return;
+    document.querySelectorAll('[data-cms]').forEach(el => {
+      const path = el.getAttribute('data-cms');
+      const value = path.split('.').reduce((o, k) => (o == null ? o : o[k]), data);
+      if (typeof value === 'string') el.textContent = value;
+    });
+  })
+  .catch(() => {});
 </script>
 </body>
 </html>

@@ -1,0 +1,40 @@
+backend:
+  name: github
+  repo: andyfreed/emmyfreed
+  branch: main
+  base_url: https://emmyfreed.com
+  auth_endpoint: api/auth
+
+media_folder: "images"
+public_folder: "/images"
+
+site_url: https://emmyfreed.com
+display_url: https://emmyfreed.com
+
+collections:
+  - name: "site"
+    label: "Site content"
+    files:
+      - name: "content"
+        label: "Main page text"
+        file: "content/site.json"
+        format: "json"
+        fields:
+          - name: "home"
+            label: "Home"
+            widget: "object"
+            fields:
+              - { name: "kicker", label: "Tiny intro line", widget: "string" }
+              - { name: "subtitle", label: "Intro paragraph", widget: "text" }
+              - { name: "ctaPrimary", label: "Primary button label", widget: "string" }
+              - { name: "ctaGhost", label: "Secondary button label", widget: "string" }
+          - name: "about"
+            label: "About Me"
+            widget: "object"
+            fields:
+              - { name: "heading", label: "Heading", widget: "string" }
+          - name: "footer"
+            label: "Footer"
+            widget: "object"
+            fields:
+              - { name: "year", label: "Copyright line", widget: "string" }
