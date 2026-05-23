@@ -41,6 +41,11 @@ password = 'slime-kid-' + fourDigitCode + '-play'
 - **`site-images` storage bucket** — public bucket for photos Emmy uploads via
   `/admin`. Only admins (`profiles.is_admin`) can write; anyone can read. The
   game doesn't use it.
+- **`public.messages`** and **`public.message_reactions`** — the website's
+  friends chat (`/chat`). Logged-in friends read/post; you edit your own,
+  admins can soft-delete (moderate) any. **Both are in the `supabase_realtime`
+  publication** — leave them there so the chat stays live. The game doesn't
+  use them.
 
 ## RLS change that DOES affect the game — read this
 

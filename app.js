@@ -171,6 +171,7 @@ function renderMeCard(prof, slimeCount) {
     statChip('🎀', `${charms} charms`) +
     (prof.created_at ? statChip('📅', `since ${memberSince(prof.created_at)}`) : '') +
     `</div>` +
+    `<a href="/chat" class="btn btn-primary me-play-btn">💬 open chat</a>` +
     `<a href="/slimemaker" class="btn btn-primary me-play-btn">🧪 make more slime →</a>`;
   $('signout-btn').addEventListener('click', async () => {
     await logOut();

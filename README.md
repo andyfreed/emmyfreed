@@ -18,6 +18,7 @@ Just open `index.html` in a browser. That's it.
 - `index.html` — the whole site (one page, scroll sections + sticky nav)
 - `styles.css` — all the styling
 - `app.js` — Supabase login + friend profiles (Players section); also loads the editable text
+- `chat.html` + `chat.js` — realtime friends chat at `/chat` (Supabase Realtime)
 - `content/site.json` — fallback copy of the editable text (live text lives in Supabase `site_content`)
 - `admin/index.html` — Emmy's browser editor at `/admin` (self-contained, logs in with Supabase)
 - `slimemaker/` — prebuilt static output of the Slime Maker game (see below)
@@ -106,5 +107,18 @@ comes from Supabase `site_content`, so to change text via code either
 update that row (e.g. with the Supabase MCP tools) or edit it in `/admin`.
 `content/site.json` is only the offline fallback.
 
+## Chat (`/chat`)
+
+A realtime friends chat, linked from the homepage nav. Logged-in friends
+(same name + code login) can post; messages appear instantly via Supabase
+Realtime. Features: emoji picker + reactions, who's-online, typing
+indicators, edit/delete your own messages, optimistic send.
+
+- Tables: `messages`, `message_reactions` (both in the `supabase_realtime`
+  publication). Code: `chat.html` + `chat.js`.
+- **Moderation:** Emmy (admin) can delete anyone's message (soft-delete →
+  shows "message deleted"). Everyone else can only edit/delete their own.
+- Only logged-in friends can read or post (RLS); the public can't see chat.
+
 ## TODO
-- Swap placeholder SVG portraits in `My Pictures` for real photos (replace the inline `<svg>` inside each `.photo-inner` with `<img src="...">`).
+- Swap placeholder SVG portraits in `My Pictures` for real photos (or just upload them via `/admin`).

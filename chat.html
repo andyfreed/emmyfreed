@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<title>Chat ✨ emmy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+  :root{
+    --ink:#1a1a2e; --ink-soft:#3d3d5c; --paper:#FFF8E7;
+    --pink:#FF3D7F; --pink-soft:#FFB5D8; --yellow:#FFD23F; --yellow-soft:#FFF1A5;
+    --mint:#B4E4B4; --sky:#7DD3FC; --lav:#C084FC; --lav-soft:#E7C6FF; --peach:#FFD6A5;
+    --radius:18px; --pop:4px 4px 0 var(--ink);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0;height:100%}
+  body{
+    font-family:'Nunito',system-ui,sans-serif; color:var(--ink); background:var(--paper);
+    background-image:radial-gradient(var(--pink-soft) 1.4px, transparent 1.4px),
+                     radial-gradient(var(--sky) 1.4px, transparent 1.4px);
+    background-size:46px 46px; background-position:0 0,23px 23px;
+    -webkit-text-size-adjust:100%; overflow:hidden;
+  }
+  .hidden{display:none !important}
+  .btn{font-family:'Lilita One',cursive; font-weight:400; font-size:1.1rem; letter-spacing:.5px;
+    border:3px solid var(--ink); border-radius:999px; padding:.65em 1.3em; cursor:pointer; box-shadow:var(--pop);
+    background:var(--yellow); color:var(--ink); -webkit-tap-highlight-color:transparent; transition:transform .08s, box-shadow .08s}
+  .btn:active{transform:translate(2px,2px); box-shadow:2px 2px 0 var(--ink)}
+  .btn-pink{background:var(--pink); color:#fff}
+
+  /* ---------- LOGIN ---------- */
+  #view-login{height:100dvh; display:flex; align-items:center; justify-content:center; padding:20px}
+  .login-card{background:#fff; border:3px solid var(--ink); border-radius:var(--radius); box-shadow:6px 6px 0 var(--ink);
+    padding:1.8rem 1.6rem; max-width:380px; width:100%; text-align:center}
+  .login-card h1{font-family:'Lilita One',cursive; font-weight:400; font-size:1.8rem; margin:0 0 .2em}
+  .login-card p{color:var(--ink-soft); font-weight:700; margin:0 0 1.3rem}
+  .login-form{display:flex; flex-direction:column; gap:13px; text-align:left}
+  .login-form label{font-family:'Lilita One',cursive; font-size:1rem; display:flex; flex-direction:column; gap:5px}
+  .login-form input{font-family:'Nunito',sans-serif; font-size:1.1rem; font-weight:700; color:var(--ink);
+    border:2.5px solid var(--ink); border-radius:12px; padding:.6em .7em; background:var(--paper)}
+  .login-form input:focus{outline:none; border-color:var(--pink); box-shadow:0 0 0 3px var(--pink-soft)}
+  #login-code{letter-spacing:8px; text-align:center; font-size:1.3rem}
+  .login-error{margin:0; padding:.7rem; font-weight:800; font-size:.9rem; background:var(--pink-soft);
+    border:2.5px solid var(--ink); border-radius:12px}
+  .login-back{display:inline-block; margin-top:1rem; font-weight:800; color:var(--ink-soft); text-decoration:underline; font-size:.9rem}
+
+  /* ---------- CHAT LAYOUT ---------- */
+  #view-chat{display:flex; flex-direction:column; height:100dvh}
+  .chat-head{
+    flex:none; display:flex; align-items:center; gap:10px; padding:max(10px,env(safe-area-inset-top)) 14px 10px;
+    background:rgba(255,248,231,0.95); backdrop-filter:blur(6px); border-bottom:3px solid var(--ink); z-index:5;
+  }
+  .chat-back{font-size:1.4rem; text-decoration:none; color:var(--ink); line-height:1; padding:2px 4px}
+  .chat-title{font-family:'Lilita One',cursive; font-size:1.35rem; margin:0; flex:1}
+  .online-pill{display:flex; align-items:center; gap:6px; font-weight:800; font-size:.85rem; color:var(--ink-soft);
+    background:#fff; border:2.5px solid var(--ink); border-radius:999px; padding:4px 11px; box-shadow:3px 3px 0 var(--ink)}
+  .online-dot{width:9px; height:9px; border-radius:50%; background:var(--mint); border:1.5px solid var(--ink)}
+
+  .messages{flex:1; overflow-y:auto; overflow-x:hidden; padding:16px 14px 8px; -webkit-overflow-scrolling:touch}
+  .empty{text-align:center; color:var(--ink-soft); font-weight:800; margin-top:30%; font-size:1.05rem}
+
+  .group{display:flex; gap:9px; margin-bottom:14px; align-items:flex-end}
+  .group.me{flex-direction:row-reverse}
+  .avatar{flex:none; width:38px; height:38px; border-radius:50%; border:2.5px solid var(--ink);
+    display:flex; align-items:center; justify-content:center; font-family:'Lilita One',cursive; font-size:1.1rem;
+    color:var(--ink); box-shadow:2px 2px 0 var(--ink)}
+  .group.me .avatar{visibility:hidden; width:6px}
+  .stack{display:flex; flex-direction:column; gap:3px; max-width:78%; min-width:0}
+  .group.me .stack{align-items:flex-end}
+  .who{font-weight:800; font-size:.8rem; color:var(--ink-soft); margin:0 6px 1px}
+  .who time{font-weight:700; opacity:.7; margin-left:6px; font-size:.72rem}
+
+  .msg{position:relative; align-self:flex-start}
+  .group.me .msg{align-self:flex-end}
+  .bubble{
+    display:inline-block; padding:9px 13px; border:2.5px solid var(--ink); border-radius:16px;
+    background:#fff; font-size:1.02rem; font-weight:600; line-height:1.35; white-space:pre-wrap;
+    word-break:break-word; box-shadow:2px 2px 0 var(--ink); cursor:pointer;
+  }
+  .group.me .bubble{background:var(--pink); color:#fff}
+  .bubble.jumbo{font-size:2.4rem; border:none; box-shadow:none; background:none !important; padding:2px 4px}
+  .bubble.pending{opacity:.55}
+  .bubble.failed{background:var(--pink-soft); color:var(--ink)}
+  .bubble.deleted{font-style:italic; color:var(--ink-soft); background:#f0ead9; font-weight:700}
+  .edited-tag{font-size:.7rem; font-weight:700; opacity:.6; margin-left:5px}
+
+  /* reactions */
+  .reacts{display:flex; flex-wrap:wrap; gap:5px; margin:4px 2px 0}
+  .group.me .reacts{justify-content:flex-end}
+  .react-chip{display:inline-flex; align-items:center; gap:4px; font-size:.85rem; font-weight:800;
+    border:2px solid var(--ink); border-radius:999px; padding:2px 8px; background:#fff; cursor:pointer; line-height:1.4}
+  .react-chip.mine{background:var(--yellow)}
+
+  /* message action popover */
+  .msg-menu{position:absolute; bottom:100%; margin-bottom:6px; display:flex; gap:4px; background:#fff;
+    border:2.5px solid var(--ink); border-radius:999px; padding:5px 7px; box-shadow:var(--pop); z-index:6; white-space:nowrap}
+  .group.me .msg-menu{right:0}
+  .msg-menu button{border:none; background:none; cursor:pointer; font-size:1.25rem; line-height:1; padding:2px}
+  .msg-menu .txt{font-family:'Nunito'; font-size:.85rem; font-weight:800; color:var(--ink-soft); padding:2px 6px}
+
+  /* inline edit */
+  .edit-box{display:flex; flex-direction:column; gap:6px}
+  .edit-box textarea{font-family:'Nunito'; font-size:1rem; font-weight:600; border:2.5px solid var(--ink);
+    border-radius:12px; padding:8px; min-width:200px; resize:vertical}
+  .edit-actions{display:flex; gap:8px}
+  .edit-actions button{font-weight:800; font-size:.85rem; border:2px solid var(--ink); border-radius:999px;
+    padding:3px 12px; cursor:pointer; background:#fff}
+  .edit-actions .save{background:var(--mint)}
+
+  .typing{min-height:18px; padding:0 6px 6px; font-size:.82rem; font-weight:800; color:var(--ink-soft); font-style:italic}
+
+  .new-pill{position:absolute; left:50%; transform:translateX(-50%); bottom:84px; z-index:7;
+    background:var(--pink); color:#fff; font-family:'Lilita One'; border:2.5px solid var(--ink); border-radius:999px;
+    padding:6px 16px; box-shadow:var(--pop); cursor:pointer; font-size:.9rem}
+
+  /* composer */
+  .composer{flex:none; border-top:3px solid var(--ink); background:rgba(255,248,231,0.97); backdrop-filter:blur(6px);
+    padding:10px 12px calc(10px + env(safe-area-inset-bottom)); display:flex; gap:8px; align-items:flex-end}
+  .emoji-btn{flex:none; font-size:1.5rem; background:#fff; border:2.5px solid var(--ink); border-radius:50%;
+    width:46px; height:46px; cursor:pointer; box-shadow:3px 3px 0 var(--ink); line-height:1}
+  .emoji-btn:active{transform:translate(2px,2px); box-shadow:1px 1px 0 var(--ink)}
+  #msg-input{flex:1; font-family:'Nunito'; font-size:1.05rem; font-weight:600; color:var(--ink);
+    border:2.5px solid var(--ink); border-radius:22px; padding:11px 15px; background:#fff; resize:none;
+    max-height:120px; line-height:1.3}
+  #msg-input:focus{outline:none; border-color:var(--pink); box-shadow:0 0 0 3px var(--pink-soft)}
+  .send-btn{flex:none; width:46px; height:46px; border-radius:50%; border:3px solid var(--ink); background:var(--pink);
+    color:#fff; font-size:1.3rem; cursor:pointer; box-shadow:3px 3px 0 var(--ink); line-height:1}
+  .send-btn:active{transform:translate(2px,2px); box-shadow:1px 1px 0 var(--ink)}
+  .send-btn:disabled{opacity:.5}
+
+  .emoji-panel{position:absolute; left:12px; right:12px; bottom:74px; z-index:8; background:#fff; border:3px solid var(--ink);
+    border-radius:var(--radius); box-shadow:var(--pop); padding:10px; max-height:230px; overflow-y:auto;
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(40px,1fr)); gap:4px}
+  .emoji-panel button{border:none; background:none; font-size:1.5rem; cursor:pointer; padding:4px; border-radius:8px; line-height:1}
+  .emoji-panel button:active{background:var(--yellow-soft)}
+</style>
+</head>
+<body>
+
+  <!-- LOGIN -->
+  <section id="view-login">
+    <div class="login-card">
+      <h1>💬 friends chat</h1>
+      <p>log in with your name &amp; code to chat!</p>
+      <form id="login-form" class="login-form" autocomplete="off">
+        <label>your name
+          <input id="login-username" type="text" maxlength="20" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="your name" />
+        </label>
+        <label>secret 4-number code
+          <input id="login-code" type="text" inputmode="numeric" pattern="\d*" maxlength="4" placeholder="••••" />
+        </label>
+        <p id="login-error" class="login-error hidden"></p>
+        <button type="submit" class="btn btn-pink" id="login-btn">let's chat! →</button>
+      </form>
+      <a class="login-back" href="/">← back to my site</a>
+    </div>
+  </section>
+
+  <!-- CHAT -->
+  <section id="view-chat" class="hidden">
+    <header class="chat-head">
+      <a class="chat-back" href="/" aria-label="Back to site">←</a>
+      <h1 class="chat-title">💬 Chat</h1>
+      <div class="online-pill"><span class="online-dot"></span><span id="online-count">1</span> online</div>
+    </header>
+    <div class="messages" id="messages"></div>
+    <div class="typing" id="typing"></div>
+    <button class="new-pill hidden" id="new-pill">↓ new messages</button>
+    <div class="composer">
+      <button class="emoji-btn" id="emoji-btn" aria-label="Emojis" type="button">😀</button>
+      <textarea id="msg-input" rows="1" placeholder="say something nice…" maxlength="2000"></textarea>
+      <button class="send-btn" id="send-btn" aria-label="Send" type="button">➤</button>
+    </div>
+    <div class="emoji-panel hidden" id="emoji-panel"></div>
+  </section>
+
+  <script type="module" src="chat.js"></script>
+</body>
+</html>
