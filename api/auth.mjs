@@ -72,16 +72,54 @@ function sendResult(res, { token, error }) {
   const payload = error ? error : JSON.stringify({ token, provider: 'github' });
   const message = `authorization:github:${status}:${payload}`;
   const messageJs = JSON.stringify(message);
+  const tokenJs = JSON.stringify(token || null);
+  const errorJs = JSON.stringify(error || null);
 
-  const html = `<!doctype html><html><body><script>
+  // Desktop path: hand the token back to the editor window (window.opener) via
+  // postMessage and close. iOS Safari's tracking protection often severs
+  // window.opener across the cross-origin GitHub round-trip, so we also keep a
+  // same-tab fallback: stash the token where Decap looks for a cached user and
+  // redirect to /admin, which logs in without needing the opener at all.
+  const html = `<!doctype html><html><head><meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>body{font:16px -apple-system,system-ui,sans-serif;margin:0;display:flex;
+min-height:100vh;align-items:center;justify-content:center;text-align:center;
+color:#333;padding:1.5rem}</style></head>
+<body><div id="msg">Finishing login…</div><script>
 (function () {
-  function receive(e) {
-    window.removeEventListener('message', receive, false);
-    window.opener.postMessage(${messageJs}, e.origin);
-    window.close();
+  var token = ${tokenJs};
+  var error = ${errorJs};
+  var done = false;
+
+  function fallback() {
+    if (done) return;
+    done = true;
+    if (error) {
+      document.getElementById('msg').textContent = 'Login failed: ' + error;
+      return;
+    }
+    try {
+      var user = JSON.stringify({ backendName: 'github', token: token });
+      localStorage.setItem('netlify-cms-user', user);
+      localStorage.setItem('decap-cms-user', user);
+    } catch (e) {}
+    window.location.replace('/admin/#/');
   }
-  window.addEventListener('message', receive, false);
-  window.opener.postMessage('authorizing:github', '*');
+
+  if (window.opener) {
+    function receive(e) {
+      window.removeEventListener('message', receive, false);
+      done = true;
+      window.opener.postMessage(${messageJs}, e.origin);
+      window.close();
+    }
+    window.addEventListener('message', receive, false);
+    try { window.opener.postMessage('authorizing:github', '*'); } catch (e) {}
+    // If the opener never answers (severed link), recover in this tab.
+    setTimeout(fallback, 1500);
+  } else {
+    fallback();
+  }
 })();
 </script></body></html>`;
 
