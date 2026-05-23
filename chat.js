@@ -60,29 +60,38 @@ function isJumbo(body){
 function byTime(a, b){ return new Date(a.created_at) - new Date(b.created_at); }
 
 /* ---------------- auth ---------------- */
-async function logIn(rawName, code){
+function validateCreds(rawName, code){
   const username = normalizeUsername(rawName);
   if (username.length < 2) throw new Error('Name must be at least 2 letters.');
   if (!/^\d{4}$/.test(code)) throw new Error('Code must be exactly 4 numbers.');
-  const email = username + EMAIL_DOMAIN;
-  const password = buildKidPassword(code);
-  const { error } = await sb.auth.signInWithPassword({ email, password });
-  if (error) {
-    const { error: upErr } = await sb.auth.signUp({ email, password, options: { data: { username } } });
-    if (upErr) {
-      if (/already|registered|exists/i.test(upErr.message)) throw new Error('That name is taken with a different code.');
-      throw new Error(upErr.message || 'Could not create your account.');
-    }
-    const { error: e2 } = await sb.auth.signInWithPassword({ email, password });
-    if (e2) throw new Error(e2.message || 'Could not log in.');
-  }
+  return { username, email: username + EMAIL_DOMAIN, password: buildKidPassword(code) };
+}
+async function ensureProfile(username){
   const { data: ud } = await sb.auth.getUser();
   let prof = await fetchProfile(ud.user.id);
-  if (!prof) {
-    await sb.from('profiles').insert({ id: ud.user.id, username });
-    prof = await fetchProfile(ud.user.id);
-  }
+  if (!prof) { await sb.from('profiles').insert({ id: ud.user.id, username }); prof = await fetchProfile(ud.user.id); }
   return prof;
+}
+// Strict log in — never creates an account by accident.
+async function logIn(rawName, code){
+  const { username, email, password } = validateCreds(rawName, code);
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+  if (error) throw new Error("That name and code don't match. New here? Tap “Create account.”");
+  return ensureProfile(username);
+}
+// Explicit account creation (also works in the slime game — same login).
+async function createAccount(rawName, code){
+  const { username, email, password } = validateCreds(rawName, code);
+  const signin = await sb.auth.signInWithPassword({ email, password });
+  if (!signin.error) return ensureProfile(username);
+  const { error: upErr } = await sb.auth.signUp({ email, password, options: { data: { username } } });
+  if (upErr) {
+    if (/already|registered|exists/i.test(upErr.message)) throw new Error('That name is already taken. Pick a different one (or log in if it’s yours).');
+    throw new Error(upErr.message || 'Could not create your account.');
+  }
+  const { error: e2 } = await sb.auth.signInWithPassword({ email, password });
+  if (e2) throw new Error('Account made, but sign-in failed. Try logging in.');
+  return ensureProfile(username);
 }
 async function fetchProfile(id){
   const { data } = await sb.from('profiles').select('id, username, is_admin').eq('id', id).maybeSingle();
@@ -355,12 +364,32 @@ function wireComposer(){
   });
 }
 
-// login form
+// login / create-account form
+let authMode = 'login';
+function setAuthMode(mode){
+  authMode = mode;
+  document.querySelectorAll('.auth-tab').forEach((t) => t.classList.toggle('active', t.getAttribute('data-mode') === mode));
+  const signup = mode === 'signup';
+  $('confirm-wrap').hidden = !signup;
+  $('login-btn').textContent = signup ? 'create my account →' : "let's chat! →";
+  $('auth-sub').textContent = signup ? 'pick a name and a secret 4-number code' : 'log in with your name & code to chat!';
+  $('login-error').classList.add('hidden');
+}
+document.querySelectorAll('.auth-tab').forEach((tab) =>
+  tab.addEventListener('click', () => setAuthMode(tab.getAttribute('data-mode')))
+);
 $('login-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const err = $('login-error'); err.classList.add('hidden');
+  const name = $('login-username').value, code = $('login-code').value;
+  if (authMode === 'signup' && $('login-code2').value.trim() !== code.trim()) {
+    err.textContent = 'Your two codes are different — type the same 4 numbers twice.'; err.classList.remove('hidden'); return;
+  }
   const btn = $('login-btn'); btn.disabled = true; const orig = btn.textContent; btn.textContent = 'one sec…';
-  try { const prof = await logIn($('login-username').value, $('login-code').value); await startChat(prof); }
+  try {
+    const prof = authMode === 'signup' ? await createAccount(name, code) : await logIn(name, code);
+    await startChat(prof);
+  }
   catch (e2) { err.textContent = e2.message || 'Login failed.'; err.classList.remove('hidden'); }
   finally { btn.disabled = false; btn.textContent = orig; }
 });

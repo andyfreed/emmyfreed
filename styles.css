@@ -675,6 +675,14 @@ body {
 .players-card-title { font-family: 'Lilita One', sans-serif; font-size: 26px; margin: 0 0 4px; }
 .players-card-sub { color: var(--ink-soft); font-weight: 700; margin: 0 0 20px; }
 .players-card-note { color: var(--ink-soft); font-weight: 700; font-size: 13px; margin: 16px 0 0; }
+.auth-tabs { display: flex; gap: 8px; margin-bottom: 18px; }
+.auth-tab {
+  flex: 1; font-family: 'Lilita One', sans-serif; font-size: 15px; letter-spacing: .3px;
+  padding: 9px 6px; border: 2.5px solid var(--ink); border-radius: 12px; background: #fff;
+  color: var(--ink-soft); cursor: pointer; box-shadow: var(--shadow-pop-sm); transition: transform .08s, box-shadow .08s;
+}
+.auth-tab.active { background: var(--yellow); color: var(--ink); }
+.auth-tab:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
 .login-form { display: flex; flex-direction: column; gap: 14px; text-align: left; }
 .login-label { font-family: 'Lilita One', sans-serif; font-size: 16px; letter-spacing: .3px; display: flex; flex-direction: column; gap: 6px; }
 .login-form input {

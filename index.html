@@ -221,21 +221,29 @@
 
   <!-- Logged out: same login as the slime game -->
   <div id="players-signin" class="players-card reveal" hidden>
-    <h3 class="players-card-title">log in to play &amp; see friends 🌈</h3>
-    <p class="players-card-sub">use the same name &amp; code as the slime game!</p>
+    <div class="auth-tabs">
+      <button type="button" class="auth-tab active" data-mode="login">Log in</button>
+      <button type="button" class="auth-tab" data-mode="signup">Create account</button>
+    </div>
+    <h3 class="players-card-title" id="auth-title">log in to play &amp; chat 🌈</h3>
+    <p class="players-card-sub" id="auth-sub">use your name &amp; 4-number code</p>
     <form id="login-form" class="login-form" autocomplete="off">
       <label class="login-label">your name
         <input id="login-username" type="text" maxlength="20" autocapitalize="off"
-               autocorrect="off" spellcheck="false" placeholder="pick a name" />
+               autocorrect="off" spellcheck="false" placeholder="your name" />
       </label>
       <label class="login-label">secret 4-number code
         <input id="login-code" type="text" inputmode="numeric" pattern="\d*"
                maxlength="4" placeholder="••••" />
       </label>
+      <label class="login-label" id="confirm-wrap" hidden>type your code again
+        <input id="login-code2" type="text" inputmode="numeric" pattern="\d*"
+               maxlength="4" placeholder="••••" />
+      </label>
       <p id="login-error" class="login-error" hidden></p>
       <button type="submit" class="btn btn-primary" id="login-btn">let's go! →</button>
     </form>
-    <p class="players-card-note">new here? just type a name and a 4-number code to make an account 💜</p>
+    <p class="players-card-note">your account works in the slime game too! 💜</p>
   </div>
 
   <!-- Logged in: your stats + everyone's profiles -->
