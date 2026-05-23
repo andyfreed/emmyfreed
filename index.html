@@ -24,6 +24,7 @@
     <li><a href="#home" data-nav="home">Home</a></li>
     <li><a href="#about" data-nav="about">About Me</a></li>
     <li><a href="#pictures" data-nav="pictures">Pictures</a></li>
+    <li><a href="#players" data-nav="players">Players</a></li>
     <li><a href="/slimemaker" data-nav="slime">Slime Maker</a></li>
   </ul>
   <button class="nav-toggle" aria-label="Menu">
@@ -209,6 +210,41 @@
 </section>
 
 <!-- ============================================= SLIME ============================================= -->
+<!-- ============================================= PLAYERS ============================================= -->
+<section id="players" class="page page-players" data-screen-label="04 Players">
+  <div class="section-head reveal">
+    <span class="tape tape-pink"></span>
+    <h2 class="section-title">Players 🫧</h2>
+    <p class="section-dek">log in to see your slime stats and your friends!</p>
+  </div>
+
+  <!-- Logged out: same login as the slime game -->
+  <div id="players-signin" class="players-card reveal" hidden>
+    <h3 class="players-card-title">log in to play &amp; see friends 🌈</h3>
+    <p class="players-card-sub">use the same name &amp; code as the slime game!</p>
+    <form id="login-form" class="login-form" autocomplete="off">
+      <label class="login-label">your name
+        <input id="login-username" type="text" maxlength="20" autocapitalize="off"
+               autocorrect="off" spellcheck="false" placeholder="pick a name" />
+      </label>
+      <label class="login-label">secret 4-number code
+        <input id="login-code" type="text" inputmode="numeric" pattern="\d*"
+               maxlength="4" placeholder="••••" />
+      </label>
+      <p id="login-error" class="login-error" hidden></p>
+      <button type="submit" class="btn btn-primary" id="login-btn">let's go! →</button>
+    </form>
+    <p class="players-card-note">new here? just type a name and a 4-number code to make an account 💜</p>
+  </div>
+
+  <!-- Logged in: your stats + everyone's profiles -->
+  <div id="players-app" hidden>
+    <div id="me-card" class="me-card reveal"></div>
+    <h3 class="players-friends-title">everyone's slimes 🌈</h3>
+    <div id="players-grid" class="players-grid"></div>
+  </div>
+</section>
+
 <section id="slime" class="page page-slime" data-screen-label="05 Slime Maker">
   <div class="section-head reveal">
     <span class="tape tape-yellow"></span>
@@ -272,6 +308,14 @@
   <div class="lightbox-content"></div>
 </div>
 
+<!-- Player profile modal -->
+<div class="player-modal" id="player-modal" role="dialog" aria-hidden="true">
+  <div class="player-modal-card">
+    <button class="player-modal-close" aria-label="Close">✕</button>
+    <div id="player-modal-body"></div>
+  </div>
+</div>
+
 
 <script>
 // ============ NAV ============
@@ -331,19 +375,8 @@ lightboxClose.addEventListener('click', closeLightbox);
 lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLightbox(); });
 
-// ============ CMS CONTENT ============
-// Pulls editable text from /content/site.json (managed via Decap CMS at /admin).
-fetch('/content/site.json', { cache: 'no-cache' })
-  .then(r => r.ok ? r.json() : null)
-  .then(data => {
-    if (!data) return;
-    document.querySelectorAll('[data-cms]').forEach(el => {
-      const path = el.getAttribute('data-cms');
-      const value = path.split('.').reduce((o, k) => (o == null ? o : o[k]), data);
-      if (typeof value === 'string') el.textContent = value;
-    });
-  })
-  .catch(() => {});
+// Editable text + login + friend profiles are handled by app.js (module).
 </script>
+<script type="module" src="app.js"></script>
 </body>
 </html>
