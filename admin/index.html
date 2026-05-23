@@ -1,12 +1,279 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>emmy CMS</title>
-  <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Edit my website ✨</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+  :root{
+    --ink:#1a1a2e; --ink-soft:#3d3d5c; --paper:#FFF8E7;
+    --pink:#FF3D7F; --pink-soft:#FFB5D8; --yellow:#FFD23F; --yellow-soft:#FFF1A5;
+    --mint:#B4E4B4; --sky:#7DD3FC; --lav:#C084FC; --lav-soft:#E7C6FF;
+    --radius:18px; --pop:5px 5px 0 var(--ink);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:'Nunito',system-ui,sans-serif; color:var(--ink);
+    background:var(--paper);
+    background-image:radial-gradient(var(--pink-soft) 1.5px, transparent 1.5px),
+                     radial-gradient(var(--sky) 1.5px, transparent 1.5px);
+    background-size:42px 42px; background-position:0 0,21px 21px;
+    min-height:100vh; padding:max(16px,env(safe-area-inset-top)) 16px 48px;
+    -webkit-text-size-adjust:100%;
+  }
+  .wrap{max-width:620px; margin:0 auto}
+  h1{font-family:'Lilita One',cursive; font-weight:400; font-size:2rem; line-height:1.05;
+     margin:.4em 0 .1em; letter-spacing:.5px}
+  .sub{color:var(--ink-soft); font-weight:700; margin:0 0 1.4rem}
+  .hidden{display:none !important}
+
+  /* ---- sign-in card ---- */
+  .signin{background:#fff; border:3px solid var(--ink); border-radius:var(--radius);
+          box-shadow:var(--pop); padding:1.6rem; text-align:center; margin-top:2rem}
+  .signin p{color:var(--ink-soft); font-weight:700; margin:.2rem 0 1.3rem}
+
+  /* ---- buttons ---- */
+  .btn{font-family:'Lilita One',cursive; font-weight:400; font-size:1.15rem; letter-spacing:.5px;
+       border:3px solid var(--ink); border-radius:999px; padding:.7em 1.4em; cursor:pointer;
+       box-shadow:var(--pop); background:var(--yellow); color:var(--ink); display:inline-block;
+       text-decoration:none; transition:transform .08s, box-shadow .08s; -webkit-tap-highlight-color:transparent}
+  .btn:active{transform:translate(3px,3px); box-shadow:2px 2px 0 var(--ink)}
+  .btn-pink{background:var(--pink); color:#fff}
+  .btn[disabled]{opacity:.55; cursor:default; transform:none; box-shadow:var(--pop)}
+
+  /* ---- fields ---- */
+  .field{background:#fff; border:3px solid var(--ink); border-radius:var(--radius);
+         box-shadow:var(--pop); padding:1rem 1.1rem 1.15rem; margin-bottom:1.1rem}
+  .field label{display:block; font-family:'Lilita One',cursive; font-weight:400;
+               font-size:1.15rem; letter-spacing:.4px; margin-bottom:.15rem}
+  .field .help{color:var(--ink-soft); font-weight:700; font-size:.92rem; margin:0 0 .7rem}
+  .field input, .field textarea{
+    width:100%; font-family:'Nunito',sans-serif; font-size:1.1rem; font-weight:700; color:var(--ink);
+    border:2.5px solid var(--ink); border-radius:12px; padding:.65em .7em; background:var(--paper);
+    resize:vertical}
+  .field input:focus, .field textarea:focus{outline:none; border-color:var(--pink);
+    box-shadow:0 0 0 3px var(--pink-soft)}
+  .field textarea{min-height:5.5em; line-height:1.4}
+
+  /* ---- sticky save bar ---- */
+  .bar{position:sticky; bottom:0; margin:1.4rem -16px -48px; padding:14px 16px calc(14px + env(safe-area-inset-bottom));
+       background:rgba(255,248,231,0.92); backdrop-filter:blur(6px);
+       border-top:3px solid var(--ink); display:flex; align-items:center; gap:12px}
+  .bar .btn{flex:1; text-align:center}
+  .topbar{display:flex; justify-content:space-between; align-items:center; gap:10px}
+  .signout{font-weight:800; color:var(--ink-soft); background:none; border:none; cursor:pointer;
+           text-decoration:underline; font-size:.95rem}
+
+  /* ---- status toast ---- */
+  .status{margin:0 0 1rem; padding:.8rem 1rem; border-radius:14px; font-weight:800;
+          border:3px solid var(--ink); box-shadow:var(--pop)}
+  .status.ok{background:var(--mint)}
+  .status.err{background:var(--pink-soft)}
+
+  .loading{text-align:center; color:var(--ink-soft); font-weight:800; padding:3rem 0; font-size:1.1rem}
+</style>
 </head>
 <body>
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+<div class="wrap">
+
+  <!-- SIGN IN -->
+  <section id="view-signin" class="hidden">
+    <h1>Emmy's website editor ✨</h1>
+    <div class="signin">
+      <p>Sign in with GitHub to change the words on your website.</p>
+      <a class="btn btn-pink" href="/api/auth">Sign in with GitHub →</a>
+    </div>
+  </section>
+
+  <!-- LOADING -->
+  <section id="view-loading">
+    <div class="loading">Loading your website… ⏳</div>
+  </section>
+
+  <!-- EDITOR -->
+  <section id="view-editor" class="hidden">
+    <div class="topbar">
+      <div>
+        <h1>Edit my website ✨</h1>
+        <p class="sub">Change the words, then tap <b>Save</b>.</p>
+      </div>
+    </div>
+    <div id="status" class="status hidden"></div>
+    <form id="form" autocomplete="off"></form>
+    <div class="bar">
+      <button type="button" class="signout" id="signout">sign out</button>
+      <button type="button" class="btn btn-pink" id="save">Save my changes 💾</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var REPO   = "andyfreed/emmyfreed";
+  var BRANCH = "main";
+  var PATH   = "content/site.json";
+  var TOKEN_KEY = "emmy-gh-token";
+
+  // The words Emmy can edit. "path" matches the keys in content/site.json.
+  var FIELDS = [
+    { path:"home.kicker",     label:"Welcome line",      help:"The tiny line at the very top of the home screen.", multiline:false },
+    { path:"home.subtitle",   label:"Hello paragraph",   help:"The friendly hello under your name.",               multiline:true  },
+    { path:"home.ctaPrimary", label:"Big button",        help:"The main button on the home screen.",               multiline:false },
+    { path:"home.ctaGhost",   label:"Other button",      help:"The second button on the home screen.",             multiline:false },
+    { path:"about.heading",   label:"About Me title",    help:"The heading of your About Me section.",             multiline:false },
+    { path:"footer.year",     label:"Bottom line",       help:"The little line at the very bottom of the page.",    multiline:false }
+  ];
+
+  var token = null, sha = null, content = null;
+  var $ = function(id){ return document.getElementById(id); };
+
+  function show(view){
+    ["signin","loading","editor"].forEach(function(v){
+      $("view-"+v).classList.toggle("hidden", v !== view);
+    });
+  }
+
+  function status(msg, ok){
+    var el = $("status");
+    el.textContent = msg;
+    el.className = "status " + (ok ? "ok" : "err");
+  }
+  function clearStatus(){ $("status").className = "status hidden"; }
+
+  // get/set a value by dotted path, e.g. "home.kicker"
+  function getPath(obj, path){
+    return path.split(".").reduce(function(o,k){ return o==null ? o : o[k]; }, obj);
+  }
+  function setPath(obj, path, val){
+    var ks = path.split("."), o = obj;
+    for(var i=0;i<ks.length-1;i++){ if(o[ks[i]]==null) o[ks[i]]={}; o=o[ks[i]]; }
+    o[ks[ks.length-1]] = val;
+  }
+
+  // UTF-8 safe base64 (the text has emoji like ⬇ and →)
+  function utf8ToB64(str){
+    var bytes = new TextEncoder().encode(str), bin = "";
+    bytes.forEach(function(b){ bin += String.fromCharCode(b); });
+    return btoa(bin);
+  }
+  function b64ToUtf8(b64){
+    var bin = atob(b64.replace(/\s/g,""));
+    var bytes = Uint8Array.from(bin, function(c){ return c.charCodeAt(0); });
+    return new TextDecoder().decode(bytes);
+  }
+
+  function gh(path, opts){
+    opts = opts || {};
+    opts.headers = Object.assign({
+      "Authorization": "token " + token,
+      "Accept": "application/vnd.github+json"
+    }, opts.headers || {});
+    return fetch("https://api.github.com" + path, opts);
+  }
+
+  function fieldId(f){ return "f_" + f.path.replace(/\./g,"_"); }
+
+  function buildForm(){
+    var html = FIELDS.map(function(f){
+      var id = fieldId(f);
+      var input = f.multiline
+        ? '<textarea id="'+id+'"></textarea>'
+        : '<input id="'+id+'" type="text" />';
+      return '<div class="field"><label for="'+id+'">'+f.label+'</label>'+
+             '<p class="help">'+f.help+'</p>'+input+'</div>';
+    }).join("");
+    $("form").innerHTML = html;
+  }
+
+  function fillForm(){
+    FIELDS.forEach(function(f){
+      var v = getPath(content, f.path);
+      $(fieldId(f)).value = (v == null ? "" : String(v));
+    });
+  }
+
+  function readForm(){
+    FIELDS.forEach(function(f){
+      setPath(content, f.path, $(fieldId(f)).value);
+    });
+  }
+
+  function signOut(){
+    try{ localStorage.removeItem(TOKEN_KEY); }catch(e){}
+    token = null;
+    show("signin");
+  }
+
+  async function load(){
+    show("loading");
+    try{
+      var res = await gh("/repos/"+REPO+"/contents/"+PATH+"?ref="+BRANCH+"&_="+Date.now());
+      if(res.status === 401){ signOut(); return; }
+      if(!res.ok){ throw new Error("GitHub said "+res.status); }
+      var data = await res.json();
+      sha = data.sha;
+      content = JSON.parse(b64ToUtf8(data.content));
+      buildForm();
+      fillForm();
+      clearStatus();
+      show("editor");
+    }catch(err){
+      buildForm();
+      show("editor");
+      status("Couldn't load the website text. ("+err.message+") Try refreshing.", false);
+    }
+  }
+
+  async function save(){
+    var btn = $("save");
+    readForm();
+    btn.disabled = true;
+    btn.textContent = "Saving…";
+    clearStatus();
+    try{
+      var body = {
+        message: "Emmy edited the website",
+        content: utf8ToB64(JSON.stringify(content, null, 2) + "\n"),
+        sha: sha,
+        branch: BRANCH
+      };
+      var res = await gh("/repos/"+REPO+"/contents/"+PATH, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+      if(res.status === 401){ signOut(); return; }
+      if(res.status === 409){
+        status("Someone else just changed the page. Refresh and try again.", false);
+        return;
+      }
+      if(!res.ok){ throw new Error("GitHub said "+res.status); }
+      var out = await res.json();
+      sha = out.content.sha; // keep the new version id so you can save again
+      status("Saved! 🎉 Your website will update in about a minute.", true);
+    }catch(err){
+      status("Hmm, saving didn't work ("+err.message+"). Try again.", false);
+    }finally{
+      btn.disabled = false;
+      btn.textContent = "Save my changes 💾";
+    }
+  }
+
+  // ---- start up ----
+  try{ token = localStorage.getItem(TOKEN_KEY); }catch(e){}
+
+  $("save").addEventListener("click", save);
+  $("signout").addEventListener("click", signOut);
+
+  if(token){ load(); } else { show("signin"); }
+})();
+</script>
 </body>
 </html>

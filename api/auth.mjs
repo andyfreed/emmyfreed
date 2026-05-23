@@ -1,13 +1,20 @@
-// GitHub OAuth proxy for Decap CMS, deployed as a Vercel serverless function.
+// GitHub sign-in for Emmy's editor at /admin, as a Vercel function.
 //
-// Decap opens /api/auth in a popup, this function redirects to GitHub,
-// GitHub redirects back here with a code, we exchange it for a token,
-// then post the token back to the opener window via window.postMessage.
+// The whole flow happens in one tab — no popups — which is what makes it
+// reliable on iPhones (Safari breaks the popup-to-opener handoff that most
+// CMS logins rely on):
 //
-// Setup (one-time):
-//   1. Create a GitHub OAuth App at https://github.com/settings/developers
-//      - Authorization callback URL: https://emmyfreed.com/api/auth
-//   2. Set OAUTH_CLIENT_ID and OAUTH_CLIENT_SECRET in Vercel env vars.
+//   1. /admin sends the browser to /api/auth
+//   2. /api/auth redirects to GitHub to ask permission
+//   3. GitHub sends the browser back to /api/auth?code=...
+//   4. we trade the code for an access token, stash it in localStorage
+//      (same origin as /admin), and send the browser back to /admin — now
+//      signed in.
+//
+// One-time setup:
+//   1. GitHub OAuth App  (https://github.com/settings/developers)
+//        Authorization callback URL: https://www.emmyfreed.com/api/auth
+//   2. Vercel env vars: OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET
 
 const OAUTH_AUTHORIZE = 'https://github.com/login/oauth/authorize';
 const OAUTH_TOKEN = 'https://github.com/login/oauth/access_token';
@@ -17,10 +24,12 @@ export default async function handler(req, res) {
   const clientSecret = process.env.OAUTH_CLIENT_SECRET;
 
   if (!clientId || !clientSecret) {
-    res.status(500).send(
-      'OAuth not configured. Set OAUTH_CLIENT_ID and OAUTH_CLIENT_SECRET ' +
-        'on the Vercel deployment — see README.md.'
-    );
+    res
+      .status(500)
+      .send(
+        'Sign-in is not configured. Set OAUTH_CLIENT_ID and OAUTH_CLIENT_SECRET ' +
+          'on the Vercel deployment — see README.md.'
+      );
     return;
   }
 
@@ -30,27 +39,24 @@ export default async function handler(req, res) {
 
   const { code, error } = req.query;
 
+  // Step 1: no code yet — bounce the browser to GitHub to ask permission.
   if (!code && !error) {
     const url = new URL(OAUTH_AUTHORIZE);
     url.searchParams.set('client_id', clientId);
     url.searchParams.set('redirect_uri', redirectUri);
-    url.searchParams.set('scope', 'repo,user');
+    url.searchParams.set('scope', 'public_repo'); // repo is public; this is all we need
     res.writeHead(302, { Location: url.toString() });
     res.end();
     return;
   }
 
-  if (error) {
-    return sendResult(res, { error: String(error) });
-  }
+  if (error) return finish(res, { error: String(error) });
 
+  // Step 2: GitHub sent us back with a code — trade it for an access token.
   try {
     const tokenRes = await fetch(OAUTH_TOKEN, {
       method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
+      headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
       body: JSON.stringify({
         client_id: clientId,
         client_secret: clientSecret,
@@ -59,67 +65,33 @@ export default async function handler(req, res) {
       }),
     });
     const data = await tokenRes.json();
-    if (data.error) return sendResult(res, { error: data.error });
-    if (!data.access_token) return sendResult(res, { error: 'No access_token in response' });
-    return sendResult(res, { token: data.access_token });
+    if (data.error) return finish(res, { error: data.error_description || data.error });
+    if (!data.access_token) return finish(res, { error: 'GitHub did not return an access token.' });
+    return finish(res, { token: data.access_token });
   } catch (err) {
-    return sendResult(res, { error: err.message || 'Unknown error' });
+    return finish(res, { error: err.message || 'Unknown error' });
   }
 }
 
-function sendResult(res, { token, error }) {
-  const status = error ? 'error' : 'success';
-  const payload = error ? error : JSON.stringify({ token, provider: 'github' });
-  const message = `authorization:github:${status}:${payload}`;
-  const messageJs = JSON.stringify(message);
+// Step 3: hand the token to /admin via localStorage (same origin) and redirect.
+function finish(res, { token, error }) {
   const tokenJs = JSON.stringify(token || null);
   const errorJs = JSON.stringify(error || null);
 
-  // Desktop path: hand the token back to the editor window (window.opener) via
-  // postMessage and close. iOS Safari's tracking protection often severs
-  // window.opener across the cross-origin GitHub round-trip, so we also keep a
-  // same-tab fallback: stash the token where Decap looks for a cached user and
-  // redirect to /admin, which logs in without needing the opener at all.
   const html = `<!doctype html><html><head><meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<style>body{font:16px -apple-system,system-ui,sans-serif;margin:0;display:flex;
-min-height:100vh;align-items:center;justify-content:center;text-align:center;
-color:#333;padding:1.5rem}</style></head>
-<body><div id="msg">Finishing login…</div><script>
-(function () {
-  var token = ${tokenJs};
-  var error = ${errorJs};
-  var done = false;
-
-  function fallback() {
-    if (done) return;
-    done = true;
-    if (error) {
-      document.getElementById('msg').textContent = 'Login failed: ' + error;
-      return;
-    }
-    try {
-      var user = JSON.stringify({ backendName: 'github', token: token });
-      localStorage.setItem('netlify-cms-user', user);
-      localStorage.setItem('decap-cms-user', user);
-    } catch (e) {}
-    window.location.replace('/admin/#/');
+<style>body{font:18px/1.4 -apple-system,system-ui,sans-serif;margin:0;min-height:100vh;
+display:flex;align-items:center;justify-content:center;text-align:center;padding:1.5rem;color:#3d3d5c}
+a{color:#FF3D7F}</style></head>
+<body><div>Signing you in…</div><script>
+(function(){
+  var token=${tokenJs}, error=${errorJs};
+  if(error){
+    document.body.innerHTML='<div>Sign-in didn\\u2019t work: '+error+'<br><br><a href="/admin">Try again</a></div>';
+    return;
   }
-
-  if (window.opener) {
-    function receive(e) {
-      window.removeEventListener('message', receive, false);
-      done = true;
-      window.opener.postMessage(${messageJs}, e.origin);
-      window.close();
-    }
-    window.addEventListener('message', receive, false);
-    try { window.opener.postMessage('authorizing:github', '*'); } catch (e) {}
-    // If the opener never answers (severed link), recover in this tab.
-    setTimeout(fallback, 1500);
-  } else {
-    fallback();
-  }
+  try{ localStorage.setItem('emmy-gh-token', token); }catch(e){}
+  location.replace('/admin');
 })();
 </script></body></html>`;
 
