@@ -73,10 +73,17 @@
   .status.ok{background:var(--mint)}
   .status.err{background:var(--pink-soft)}
   .loading{text-align:center; color:var(--ink-soft); font-weight:800; padding:3rem 0; font-size:1.1rem}
+
+  .back-link{display:inline-block; margin-bottom:.4rem; font-weight:800; font-size:.95rem;
+    color:var(--ink-soft); text-decoration:none; padding:6px 14px; border:2.5px solid var(--ink);
+    border-radius:999px; background:#fff; box-shadow:var(--pop); transition:transform .08s, box-shadow .08s}
+  .back-link:active{transform:translate(2px,2px); box-shadow:2px 2px 0 var(--ink)}
 </style>
 </head>
 <body>
 <div class="wrap">
+
+  <a class="back-link" href="/">← back to my site</a>
 
   <!-- LOGIN -->
   <section id="view-login" class="hidden">
