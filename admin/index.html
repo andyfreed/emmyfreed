@@ -17,22 +17,18 @@
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   body{
-    font-family:'Nunito',system-ui,sans-serif; color:var(--ink);
-    background:var(--paper);
+    font-family:'Nunito',system-ui,sans-serif; color:var(--ink); background:var(--paper);
     background-image:radial-gradient(var(--pink-soft) 1.5px, transparent 1.5px),
                      radial-gradient(var(--sky) 1.5px, transparent 1.5px);
     background-size:42px 42px; background-position:0 0,21px 21px;
-    min-height:100vh; padding:max(16px,env(safe-area-inset-top)) 16px 48px;
-    -webkit-text-size-adjust:100%;
+    min-height:100vh; padding:max(16px,env(safe-area-inset-top)) 16px 48px; -webkit-text-size-adjust:100%;
   }
-  .wrap{max-width:620px; margin:0 auto}
-  h1{font-family:'Lilita One',cursive; font-weight:400; font-size:2rem; line-height:1.05;
-     margin:.4em 0 .1em; letter-spacing:.5px}
+  .wrap{max-width:640px; margin:0 auto}
+  h1{font-family:'Lilita One',cursive; font-weight:400; font-size:2rem; line-height:1.05; margin:.4em 0 .1em; letter-spacing:.5px}
   .sub{color:var(--ink-soft); font-weight:700; margin:0 0 1.4rem}
   .hidden{display:none !important}
 
-  .card{background:#fff; border:3px solid var(--ink); border-radius:var(--radius);
-        box-shadow:var(--pop); padding:1.6rem; text-align:center; margin-top:2rem}
+  .card{background:#fff; border:3px solid var(--ink); border-radius:var(--radius); box-shadow:var(--pop); padding:1.6rem; text-align:center; margin-top:2rem}
   .card p{color:var(--ink-soft); font-weight:700; margin:.2rem 0 1.3rem}
 
   .btn{font-family:'Lilita One',cursive; font-weight:400; font-size:1.15rem; letter-spacing:.5px;
@@ -43,41 +39,64 @@
   .btn-pink{background:var(--pink); color:#fff}
   .btn[disabled]{opacity:.55; cursor:default}
 
-  /* login form */
+  .back-link{display:inline-block; margin-bottom:.4rem; font-weight:800; font-size:.95rem; color:var(--ink-soft);
+    text-decoration:none; padding:6px 14px; border:2.5px solid var(--ink); border-radius:999px; background:#fff;
+    box-shadow:var(--pop); transition:transform .08s, box-shadow .08s}
+  .back-link:active{transform:translate(2px,2px); box-shadow:2px 2px 0 var(--ink)}
+
   .login-form{display:flex; flex-direction:column; gap:14px; text-align:left; margin-top:.5rem}
-  .login-form label{font-family:'Lilita One',cursive; font-size:1.05rem; letter-spacing:.3px;
-                    display:flex; flex-direction:column; gap:6px}
+  .login-form label{font-family:'Lilita One',cursive; font-size:1.05rem; letter-spacing:.3px; display:flex; flex-direction:column; gap:6px}
   .login-form input{font-family:'Nunito',sans-serif; font-size:1.1rem; font-weight:700; color:var(--ink);
                     border:2.5px solid var(--ink); border-radius:12px; padding:.65em .7em; background:var(--paper)}
   .login-form input:focus{outline:none; border-color:var(--pink); box-shadow:0 0 0 3px var(--pink-soft)}
   #login-code{letter-spacing:8px; text-align:center; font-size:1.4rem}
 
-  /* editor fields */
-  .field{background:#fff; border:3px solid var(--ink); border-radius:var(--radius);
-         box-shadow:var(--pop); padding:1rem 1.1rem 1.15rem; margin-bottom:1.1rem}
-  .field label{display:block; font-family:'Lilita One',cursive; font-size:1.15rem; letter-spacing:.4px; margin-bottom:.15rem}
-  .field .help{color:var(--ink-soft); font-weight:700; font-size:.92rem; margin:0 0 .7rem}
-  .field input, .field textarea{width:100%; font-family:'Nunito',sans-serif; font-size:1.1rem; font-weight:700;
-    color:var(--ink); border:2.5px solid var(--ink); border-radius:12px; padding:.65em .7em; background:var(--paper); resize:vertical}
+  /* collapsible sections */
+  details.section{background:#fff; border:3px solid var(--ink); border-radius:var(--radius); box-shadow:var(--pop); margin-bottom:1.1rem; overflow:hidden}
+  details.section > summary{font-family:'Lilita One',cursive; font-size:1.25rem; letter-spacing:.4px; padding:.85em 1em; cursor:pointer; list-style:none; background:var(--yellow-soft); display:flex; justify-content:space-between; align-items:center}
+  details.section > summary::-webkit-details-marker{display:none}
+  details.section > summary::after{content:'▸'; transition:transform .15s}
+  details.section[open] > summary::after{transform:rotate(90deg)}
+  .section-body{padding:1rem 1.1rem 1.15rem}
+
+  .field{margin-bottom:1.1rem}
+  .field:last-child{margin-bottom:0}
+  .field > label{display:block; font-family:'Lilita One',cursive; font-size:1.02rem; letter-spacing:.3px; margin-bottom:.4rem}
+  .field input[type=text], .field textarea{width:100%; font-family:'Nunito',sans-serif; font-size:1.05rem; font-weight:700;
+    color:var(--ink); border:2.5px solid var(--ink); border-radius:12px; padding:.6em .7em; background:var(--paper); resize:vertical}
   .field input:focus, .field textarea:focus{outline:none; border-color:var(--pink); box-shadow:0 0 0 3px var(--pink-soft)}
-  .field textarea{min-height:5.5em; line-height:1.4}
+  .field textarea{min-height:5em; line-height:1.4}
+
+  /* favorite compact row */
+  .fav-row{display:grid; grid-template-columns:56px 1fr 1fr; gap:8px; align-items:end}
+  .fav-row .mini{display:flex; flex-direction:column; gap:4px}
+  .fav-row .mini span{font-weight:800; font-size:.78rem; color:var(--ink-soft)}
+  .fav-row input{text-align:center}
+  .fav-row .emoji input{font-size:1.3rem}
+
+  /* image picker */
+  .img-field{display:flex; gap:12px; align-items:center}
+  .img-preview{width:84px; height:84px; flex:none; border:2.5px solid var(--ink); border-radius:12px; overflow:hidden;
+    background:var(--lav-soft); display:flex; align-items:center; justify-content:center; font-size:.7rem; color:var(--ink-soft); text-align:center; font-weight:800}
+  .img-preview img{width:100%; height:100%; object-fit:cover; display:block}
+  .img-actions{display:flex; flex-direction:column; gap:6px; align-items:flex-start}
+  .btn-mini{font-family:'Nunito',sans-serif; font-weight:800; font-size:.9rem; border:2.5px solid var(--ink); border-radius:999px;
+    padding:6px 14px; background:#fff; cursor:pointer; box-shadow:3px 3px 0 var(--ink)}
+  .btn-mini:active{transform:translate(2px,2px); box-shadow:1px 1px 0 var(--ink)}
+  .img-remove{background:none; border:none; color:var(--ink-soft); font-weight:800; text-decoration:underline; cursor:pointer; font-size:.85rem; padding:0}
+  .img-status{font-weight:800; font-size:.85rem; color:var(--ink-soft)}
+  .img-status.ok{color:#1a8a3a}
+  .img-status.err{color:var(--pink)}
 
   .bar{position:sticky; bottom:0; margin:1.4rem -16px -48px; padding:14px 16px calc(14px + env(safe-area-inset-bottom));
-       background:rgba(255,248,231,0.92); backdrop-filter:blur(6px); border-top:3px solid var(--ink);
-       display:flex; align-items:center; gap:12px}
+       background:rgba(255,248,231,0.94); backdrop-filter:blur(6px); border-top:3px solid var(--ink); display:flex; align-items:center; gap:12px}
   .bar .btn{flex:1; text-align:center}
-  .signout{font-weight:800; color:var(--ink-soft); background:none; border:none; cursor:pointer;
-           text-decoration:underline; font-size:.95rem}
+  .signout{font-weight:800; color:var(--ink-soft); background:none; border:none; cursor:pointer; text-decoration:underline; font-size:.95rem}
 
   .status{margin:0 0 1rem; padding:.8rem 1rem; border-radius:14px; font-weight:800; border:3px solid var(--ink); box-shadow:var(--pop)}
   .status.ok{background:var(--mint)}
   .status.err{background:var(--pink-soft)}
   .loading{text-align:center; color:var(--ink-soft); font-weight:800; padding:3rem 0; font-size:1.1rem}
-
-  .back-link{display:inline-block; margin-bottom:.4rem; font-weight:800; font-size:.95rem;
-    color:var(--ink-soft); text-decoration:none; padding:6px 14px; border:2.5px solid var(--ink);
-    border-radius:999px; background:#fff; box-shadow:var(--pop); transition:transform .08s, box-shadow .08s}
-  .back-link:active{transform:translate(2px,2px); box-shadow:2px 2px 0 var(--ink)}
 </style>
 </head>
 <body>
@@ -92,8 +111,7 @@
       <p>Log in with your slime-game name &amp; code to edit the website.</p>
       <form id="login-form" class="login-form" autocomplete="off">
         <label>your name
-          <input id="login-username" type="text" maxlength="20" autocapitalize="off"
-                 autocorrect="off" spellcheck="false" placeholder="your name" />
+          <input id="login-username" type="text" maxlength="20" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="your name" />
         </label>
         <label>secret 4-number code
           <input id="login-code" type="text" inputmode="numeric" pattern="\d*" maxlength="4" placeholder="••••" />
@@ -105,9 +123,7 @@
   </section>
 
   <!-- LOADING -->
-  <section id="view-loading">
-    <div class="loading">Loading… ⏳</div>
-  </section>
+  <section id="view-loading"><div class="loading">Loading… ⏳</div></section>
 
   <!-- NOT ALLOWED -->
   <section id="view-denied" class="hidden">
@@ -121,7 +137,7 @@
   <!-- EDITOR -->
   <section id="view-editor" class="hidden">
     <h1>Edit my website ✨</h1>
-    <p class="sub">Change the words, then tap <b>Save</b>.</p>
+    <p class="sub">Tap a section to open it. Change things, then tap <b>Save</b>.</p>
     <div id="status" class="status hidden"></div>
     <form id="form" autocomplete="off"></form>
     <div class="bar">
@@ -140,33 +156,64 @@ const SUPABASE_ANON_KEY =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhpa2lzc2l0d2V4ZXRldGF1cm5tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzExMjE3MDksImV4cCI6MjA4NjY5NzcwOX0.RaoUV5pYIYZjQRHiFIOQd_8jaM3oAgzqtJkNgRlFczY';
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// Same login scheme as the slime game (keep in sync — see app.js / slime-maker).
+const BUCKET = 'site-images';
 const EMAIL_DOMAIN = '@slimemaker.game';
-const normalizeUsername = (raw) =>
-  raw.trim().toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
+const normalizeUsername = (raw) => raw.trim().toLowerCase().replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '');
 const buildKidPassword = (code) => `slime-kid-${code}-play`;
 
 const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
 
-const FIELDS = [
-  { path:'home.kicker',     label:'Welcome line',    help:'The tiny line at the very top of the home screen.', multiline:false },
-  { path:'home.subtitle',   label:'Hello paragraph', help:'The friendly hello under your name.',               multiline:true  },
-  { path:'home.ctaPrimary', label:'Big button',      help:'The main button on the home screen.',               multiline:false },
-  { path:'home.ctaGhost',   label:'Other button',    help:'The second button on the home screen.',             multiline:false },
-  { path:'about.heading',   label:'About Me title',  help:'The heading of your About Me section.',             multiline:false },
-  { path:'footer.year',     label:'Bottom line',     help:'The little line at the very bottom of the page.',    multiline:false },
+// What Emmy can edit. Paths match the data-cms / data-cms-img attrs in index.html.
+const FAV = (i, emoji) => ({ type:'fav', path:`about.favs.${i}`, emoji });
+const PHOTO = (i, name) => ({ type:'photo', path:`pictures.photos.${i}`, label:`Photo ${i + 1} — ${name}` });
+const SECTIONS = [
+  { title:'🏠 Home screen', open:true, fields:[
+    { path:'home.kicker',     label:'Welcome line',     type:'text' },
+    { path:'home.subtitle',   label:'Hello paragraph',  type:'textarea' },
+    { path:'home.ctaPrimary', label:'Big button',       type:'text' },
+    { path:'home.ctaGhost',   label:'Other button',     type:'text' },
+  ]},
+  { title:'🙋 About Me', fields:[
+    { path:'about.title',           label:'Section title',     type:'text' },
+    { path:'about.dek',             label:'Section subtitle',  type:'text' },
+    { path:'about.polaroidImage',   label:'Your big photo',    type:'image' },
+    { path:'about.polaroidCaption', label:'Photo caption',     type:'text' },
+    { path:'about.heading',         label:'Hello heading',     type:'text' },
+    { path:'about.bio1',            label:'About paragraph 1', type:'textarea' },
+    { path:'about.bio2',            label:'About paragraph 2', type:'textarea' },
+  ]},
+  { title:'⭐ My favorite things', fields:[
+    { path:'about.favTitle', label:'Favorites title', type:'text' },
+    FAV(0,'🍕'), FAV(1,'🎨'), FAV(2,'🐶'), FAV(3,'💜'), FAV(4,'📚'), FAV(5,'🏫'),
+  ]},
+  { title:'📷 My Pictures', fields:[
+    { path:'pictures.title', label:'Section title',    type:'text' },
+    { path:'pictures.dek',   label:'Section subtitle', type:'text' },
+    PHOTO(0,'beach'), PHOTO(1,'birthday'), PHOTO(2,'art'), PHOTO(3,'puppy'), PHOTO(4,'bestie'),
+    PHOTO(5,'halloween'), PHOTO(6,'ice cream'), PHOTO(7,'bike'), PHOTO(8,'sleepover'),
+  ]},
+  { title:'🫧 Players', fields:[
+    { path:'players.title', label:'Section title',    type:'text' },
+    { path:'players.dek',   label:'Section subtitle', type:'text' },
+  ]},
+  { title:'🧪 Slime Maker', fields:[
+    { path:'slime.title',     label:'Section title',    type:'text' },
+    { path:'slime.dek',       label:'Section subtitle', type:'text' },
+    { path:'slime.ctaKicker', label:'Little kicker',    type:'text' },
+    { path:'slime.ctaTitle',  label:'Big headline',     type:'text' },
+    { path:'slime.ctaText',   label:'Description',      type:'textarea' },
+    { path:'slime.ctaBtn',    label:'Button',           type:'text' },
+  ]},
+  { title:'📝 Footer', fields:[
+    { path:'footer.year', label:'Bottom line', type:'text' },
+  ]},
 ];
 
 let content = null;
 
-function show(view){
-  ['login','loading','denied','editor'].forEach((v) =>
-    $('view-' + v).classList.toggle('hidden', v !== view)
-  );
-}
-function status(msg, ok){
-  const el = $('status'); el.textContent = msg; el.className = 'status ' + (ok ? 'ok' : 'err');
-}
+function show(view){ ['login','loading','denied','editor'].forEach((v) => $('view-' + v).classList.toggle('hidden', v !== view)); }
+function status(msg, ok){ const el = $('status'); el.textContent = msg; el.className = 'status ' + (ok ? 'ok' : 'err'); }
 function clearStatus(){ $('status').className = 'status hidden'; }
 
 function getPath(obj, path){ return path.split('.').reduce((o,k)=> o==null?o:o[k], obj); }
@@ -175,27 +222,127 @@ function setPath(obj, path, val){
   for(let i=0;i<ks.length-1;i++){ if(o[ks[i]]==null) o[ks[i]]={}; o=o[ks[i]]; }
   o[ks[ks.length-1]] = val;
 }
-const fieldId = (f) => 'f_' + f.path.replace(/\./g,'_');
 
+/* ---------- form building ---------- */
+function textControl(path, multiline){
+  return multiline
+    ? `<textarea data-path="${path}"></textarea>`
+    : `<input type="text" data-path="${path}" />`;
+}
+function imageControl(path){
+  return (
+    `<div class="img-field" data-img-path="${path}">` +
+      `<div class="img-preview" data-role="preview">no photo yet</div>` +
+      `<div class="img-actions">` +
+        `<label class="btn-mini">📷 Choose photo<input type="file" accept="image/*" hidden data-role="file"></label>` +
+        `<button type="button" class="img-remove hidden" data-role="remove">remove photo</button>` +
+        `<span class="img-status" data-role="status"></span>` +
+      `</div>` +
+    `</div>`
+  );
+}
+function fieldHtml(f){
+  if (f.type === 'image')
+    return `<div class="field"><label>${esc(f.label)}</label>${imageControl(f.path)}</div>`;
+  if (f.type === 'photo')
+    return `<div class="field"><label>${esc(f.label)}</label>${imageControl(f.path + '.image')}` +
+           `<div style="margin-top:8px">${textControl(f.path + '.caption', false)}</div></div>`;
+  if (f.type === 'fav')
+    return `<div class="field"><div class="fav-row">` +
+      `<div class="mini emoji"><span>icon</span>${textControl(f.path + '.emoji', false)}</div>` +
+      `<div class="mini"><span>name</span>${textControl(f.path + '.label', false)}</div>` +
+      `<div class="mini"><span>answer</span>${textControl(f.path + '.value', false)}</div>` +
+      `</div></div>`;
+  return `<div class="field"><label>${esc(f.label)}</label>${textControl(f.path, f.type === 'textarea')}</div>`;
+}
 function buildForm(){
-  $('form').innerHTML = FIELDS.map((f) => {
-    const id = fieldId(f);
-    const input = f.multiline ? `<textarea id="${id}"></textarea>` : `<input id="${id}" type="text" />`;
-    return `<div class="field"><label for="${id}">${f.label}</label><p class="help">${f.help}</p>${input}</div>`;
-  }).join('');
+  $('form').innerHTML = SECTIONS.map((s) =>
+    `<details class="section"${s.open ? ' open' : ''}><summary>${esc(s.title)}</summary>` +
+    `<div class="section-body">${s.fields.map(fieldHtml).join('')}</div></details>`
+  ).join('');
+  wireImages();
 }
 function fillForm(){
-  FIELDS.forEach((f) => { const v = getPath(content, f.path); $(fieldId(f)).value = (v==null ? '' : String(v)); });
+  document.querySelectorAll('[data-path]').forEach((el) => {
+    const v = getPath(content, el.getAttribute('data-path'));
+    el.value = (v == null ? '' : String(v));
+  });
+  document.querySelectorAll('.img-field').forEach((wrap) => setPreview(wrap, getPath(content, wrap.getAttribute('data-img-path'))));
 }
-function readForm(){ FIELDS.forEach((f) => setPath(content, f.path, $(fieldId(f)).value)); }
+function readForm(){
+  document.querySelectorAll('[data-path]').forEach((el) => setPath(content, el.getAttribute('data-path'), el.value));
+}
 
+/* ---------- images ---------- */
+function setPreview(wrap, url){
+  const preview = wrap.querySelector('[data-role="preview"]');
+  const remove = wrap.querySelector('[data-role="remove"]');
+  if (url && /^https?:\/\//.test(url)){
+    preview.innerHTML = `<img src="${esc(url)}" alt="" />`;
+    remove.classList.remove('hidden');
+  } else {
+    preview.textContent = 'no photo yet';
+    remove.classList.add('hidden');
+  }
+}
+
+// Shrink big phone photos before upload (max 1280px, JPEG) so the site stays fast.
+async function resizeToJpeg(file, maxDim, quality){
+  const dataUrl = await new Promise((res, rej) => {
+    const fr = new FileReader(); fr.onload = () => res(fr.result); fr.onerror = () => rej(new Error('read failed')); fr.readAsDataURL(file);
+  });
+  const img = await new Promise((res, rej) => {
+    const i = new Image(); i.onload = () => res(i); i.onerror = () => rej(new Error('not an image')); i.src = dataUrl;
+  });
+  let w = img.naturalWidth, h = img.naturalHeight;
+  if (Math.max(w, h) > maxDim){ const s = maxDim / Math.max(w, h); w = Math.round(w * s); h = Math.round(h * s); }
+  const canvas = document.createElement('canvas'); canvas.width = w; canvas.height = h;
+  canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+  return await new Promise((res, rej) => canvas.toBlob((b) => b ? res(b) : rej(new Error('encode failed')), 'image/jpeg', quality));
+}
+
+function wireImages(){
+  document.querySelectorAll('.img-field').forEach((wrap) => {
+    const imgPath = wrap.getAttribute('data-img-path');
+    const file = wrap.querySelector('[data-role="file"]');
+    const stat = wrap.querySelector('[data-role="status"]');
+    const remove = wrap.querySelector('[data-role="remove"]');
+
+    file.addEventListener('change', async () => {
+      const f = file.files && file.files[0];
+      if (!f) return;
+      stat.textContent = 'shrinking…'; stat.className = 'img-status';
+      try {
+        const blob = await resizeToJpeg(f, 1280, 0.85);
+        stat.textContent = 'uploading…';
+        const objectPath = imgPath.replace(/\./g, '_') + '-' + Date.now() + '.jpg';
+        const up = await sb.storage.from(BUCKET).upload(objectPath, blob, { contentType: 'image/jpeg', upsert: true });
+        if (up.error) throw up.error;
+        const { data } = sb.storage.from(BUCKET).getPublicUrl(objectPath);
+        setPath(content, imgPath, data.publicUrl);
+        setPreview(wrap, data.publicUrl);
+        stat.textContent = '✓ photo ready — tap Save'; stat.className = 'img-status ok';
+      } catch (err) {
+        stat.textContent = '⚠️ ' + (err.message || 'upload failed'); stat.className = 'img-status err';
+      } finally {
+        file.value = '';
+      }
+    });
+
+    remove.addEventListener('click', () => {
+      setPath(content, imgPath, '');
+      setPreview(wrap, '');
+      stat.textContent = 'will use the drawing — tap Save'; stat.className = 'img-status';
+    });
+  });
+}
+
+/* ---------- auth + load + save ---------- */
 async function logIn(rawName, code){
   const username = normalizeUsername(rawName);
   if (username.length < 2) throw new Error('Name must be at least 2 letters.');
   if (!/^\d{4}$/.test(code)) throw new Error('Code must be exactly 4 numbers.');
-  const email = username + EMAIL_DOMAIN;
-  const password = buildKidPassword(code);
-  const { error } = await sb.auth.signInWithPassword({ email, password });
+  const { error } = await sb.auth.signInWithPassword({ email: username + EMAIL_DOMAIN, password: buildKidPassword(code) });
   if (error) throw new Error('Wrong name or code.');
 }
 
@@ -203,29 +350,25 @@ async function loadEditor(){
   show('loading');
   const { data: sess } = await sb.auth.getSession();
   if (!sess.session){ show('login'); return; }
-
-  const { data: prof } = await sb.from('profiles')
-    .select('is_admin').eq('id', sess.session.user.id).maybeSingle();
+  const { data: prof } = await sb.from('profiles').select('is_admin').eq('id', sess.session.user.id).maybeSingle();
   if (!prof || !prof.is_admin){ show('denied'); return; }
-
   const { data: row, error } = await sb.from('site_content').select('data').eq('id','main').maybeSingle();
-  if (error){ show('editor'); buildForm(); status('Could not load the text ('+error.message+').', false); return; }
   content = (row && row.data) ? row.data : {};
-  buildForm(); fillForm(); clearStatus(); show('editor');
+  buildForm(); fillForm();
+  if (error){ status('Could not load the text (' + error.message + ').', false); } else { clearStatus(); }
+  show('editor');
 }
 
 async function save(){
-  const btn = $('save');
-  readForm();
+  const btn = $('save'); readForm();
   btn.disabled = true; const orig = btn.textContent; btn.textContent = 'Saving…'; clearStatus();
   try {
-    const { error } = await sb.from('site_content')
-      .update({ data: content, updated_at: new Date().toISOString() })
-      .eq('id','main');
+    const { error } = await sb.from('site_content').update({ data: content, updated_at: new Date().toISOString() }).eq('id','main');
     if (error) throw error;
-    status('Saved! 🎉 Your website updates right away — refresh it to see.', true);
+    status('Saved! 🎉 Your website updated — refresh it to see.', true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   } catch (err) {
-    status("Hmm, saving didn't work (" + (err.message||err) + ').', false);
+    status("Hmm, saving didn't work (" + (err.message || err) + ').', false);
   } finally {
     btn.disabled = false; btn.textContent = orig;
   }
@@ -233,19 +376,13 @@ async function save(){
 
 async function signOut(){ await sb.auth.signOut(); show('login'); }
 
-// wire up
 $('login-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const err = $('login-error'); err.className = 'status err hidden';
   const btn = $('login-btn'); btn.disabled = true; const orig = btn.textContent; btn.textContent = 'one sec…';
-  try {
-    await logIn($('login-username').value, $('login-code').value);
-    await loadEditor();
-  } catch (e2) {
-    err.textContent = e2.message || 'Login failed.'; err.className = 'status err';
-  } finally {
-    btn.disabled = false; btn.textContent = orig;
-  }
+  try { await logIn($('login-username').value, $('login-code').value); await loadEditor(); }
+  catch (e2) { err.textContent = e2.message || 'Login failed.'; err.className = 'status err'; }
+  finally { btn.disabled = false; btn.textContent = orig; }
 });
 $('save').addEventListener('click', save);
 $('signout').addEventListener('click', signOut);

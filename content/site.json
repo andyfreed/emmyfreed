@@ -6,7 +6,49 @@
     "ctaGhost": "meet emmy"
   },
   "about": {
-    "heading": "hi, i'm Emmy!"
+    "title": "About Me",
+    "dek": "the important stuff you should know",
+    "polaroidImage": "",
+    "polaroidCaption": "that's me!",
+    "heading": "hi, i'm Emmy!",
+    "bio1": "i am 8 years old and i live with my family. i love art, slime, and riding my bike really fast down the hill behind our house.",
+    "bio2": "when i grow up i want to be a vet AND an artist so i can paint puppies all day. i made this website myself (with a little help).",
+    "favTitle": "my favorite things",
+    "favs": [
+      { "emoji": "🍕", "label": "food", "value": "pizza" },
+      { "emoji": "🎨", "label": "hobby", "value": "painting" },
+      { "emoji": "🐶", "label": "animal", "value": "puppies" },
+      { "emoji": "💜", "label": "color", "value": "purple" },
+      { "emoji": "📚", "label": "book", "value": "Dog Man" },
+      { "emoji": "🏫", "label": "subject", "value": "art class" }
+    ]
+  },
+  "pictures": {
+    "title": "My Pictures",
+    "dek": "tap any picture to see it big!",
+    "photos": [
+      { "caption": "beach day 🌊", "image": "" },
+      { "caption": "8th birthday! 🎂", "image": "" },
+      { "caption": "my painting 🎨", "image": "" },
+      { "caption": "snuggles 🐶", "image": "" },
+      { "caption": "best friends 💕", "image": "" },
+      { "caption": "halloween 🎃", "image": "" },
+      { "caption": "ice cream!! 🍦", "image": "" },
+      { "caption": "zoom 🚴‍♀️", "image": "" },
+      { "caption": "sleepover ✨", "image": "" }
+    ]
+  },
+  "players": {
+    "title": "Players 🫧",
+    "dek": "log in to see your slime stats and your friends!"
+  },
+  "slime": {
+    "title": "Slime Maker ✨",
+    "dek": "i made a whole game for this!!",
+    "ctaKicker": "✨ play the game ✨",
+    "ctaTitle": "my slime maker is its own whole thing!",
+    "ctaText": "pick a color, add glitter, toss in charms, and make the coolest slime ever. click the button to play!",
+    "ctaBtn": "🧪 open slime maker →"
   },
   "footer": {
     "year": "© 2026 • emmy is awesome dot com"

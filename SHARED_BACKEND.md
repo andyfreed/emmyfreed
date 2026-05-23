@@ -38,6 +38,9 @@ password = 'slime-kid-' + fourDigitCode + '-play'
   it, but **don't drop it**.
 - **`public.site_content`** — table `(id text pk, data jsonb, updated_at timestamptz)`.
   Holds the website's editable text. Nothing in the game uses it.
+- **`site-images` storage bucket** — public bucket for photos Emmy uploads via
+  `/admin`. Only admins (`profiles.is_admin`) can write; anyone can read. The
+  game doesn't use it.
 
 ## RLS change that DOES affect the game — read this
 

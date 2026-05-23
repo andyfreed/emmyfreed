@@ -54,12 +54,26 @@ async function loadContent() {
     }
   }
   if (!data) return;
+  const at = (path) => path.split('.').reduce((o, k) => (o == null ? o : o[k]), data);
+
+  // Editable text
   document.querySelectorAll('[data-cms]').forEach((el) => {
-    const v = el
-      .getAttribute('data-cms')
-      .split('.')
-      .reduce((o, k) => (o == null ? o : o[k]), data);
-    if (typeof v === 'string') el.textContent = v;
+    const v = at(el.getAttribute('data-cms'));
+    if (typeof v === 'string' && v.length) el.textContent = v;
+  });
+
+  // Uploaded photos: drop the image in as a cover background and hide the
+  // placeholder drawing. If no image is set yet, the placeholder stays.
+  document.querySelectorAll('[data-cms-img]').forEach((el) => {
+    const url = at(el.getAttribute('data-cms-img'));
+    if (typeof url === 'string' && /^https?:\/\//.test(url)) {
+      el.style.backgroundImage = `url("${url}")`;
+      el.style.backgroundSize = 'cover';
+      el.style.backgroundPosition = 'center';
+      el.classList.add('has-photo');
+      const svg = el.querySelector('svg');
+      if (svg) svg.style.display = 'none';
+    }
   });
 }
 

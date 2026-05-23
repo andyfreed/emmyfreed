@@ -87,15 +87,15 @@
 <section id="about" class="page page-about" data-screen-label="02 About">
   <div class="section-head reveal">
     <span class="tape tape-pink"></span>
-    <h2 class="section-title">About Me</h2>
-    <p class="section-dek">the important stuff you should know</p>
+    <h2 class="section-title" data-cms="about.title">About Me</h2>
+    <p class="section-dek" data-cms="about.dek">the important stuff you should know</p>
   </div>
 
   <div class="about-grid">
     <!-- Big polaroid -->
     <div class="about-photo reveal" style="--r: -3deg">
       <div class="polaroid">
-        <div class="polaroid-img" style="background: linear-gradient(135deg,#FFE5EC,#FFD6A5);">
+        <div class="polaroid-img" data-cms-img="about.polaroidImage" style="background: linear-gradient(135deg,#FFE5EC,#FFD6A5);">
           <svg viewBox="0 0 200 200" class="placeholder-girl">
             <circle cx="100" cy="85" r="48" fill="#FFD6A5" stroke="#1a1a2e" stroke-width="5"/>
             <path d="M52 85 Q 50 40 100 38 Q 150 40 148 85 Q 148 95 140 98 Q 135 75 100 75 Q 65 75 60 98 Q 52 95 52 85 Z" fill="#8B4513" stroke="#1a1a2e" stroke-width="5" stroke-linejoin="round"/>
@@ -107,7 +107,7 @@
             <path d="M50 200 L 50 160 Q 100 140 150 160 L 150 200 Z" fill="#C084FC" stroke="#1a1a2e" stroke-width="5"/>
           </svg>
         </div>
-        <p class="polaroid-caption">that's me!</p>
+        <p class="polaroid-caption" data-cms="about.polaroidCaption">that's me!</p>
       </div>
       <span class="tape tape-yellow tl"></span>
     </div>
@@ -115,20 +115,20 @@
     <!-- Bio card -->
     <div class="bio-card reveal" style="--r: 1.5deg">
       <h3 data-cms="about.heading">hi, i'm Emmy!</h3>
-      <p>i am <span class="hl hl-pink">8 years old</span> and i live with my family. i love art, slime, and riding my bike really fast down the hill behind our house.</p>
-      <p>when i grow up i want to be a <span class="hl hl-yellow">vet AND an artist</span> so i can paint puppies all day. i made this website myself (with a little help).</p>
+      <p data-cms="about.bio1">i am 8 years old and i live with my family. i love art, slime, and riding my bike really fast down the hill behind our house.</p>
+      <p data-cms="about.bio2">when i grow up i want to be a vet AND an artist so i can paint puppies all day. i made this website myself (with a little help).</p>
     </div>
 
     <!-- Favorites grid -->
     <div class="favorites reveal">
-      <h3 class="fav-title">my favorite things</h3>
+      <h3 class="fav-title" data-cms="about.favTitle">my favorite things</h3>
       <div class="fav-grid">
-        <div class="fav" style="--c:#FFD6A5; --r:-2deg"><span class="fav-emoji">🍕</span><span class="fav-label">food</span><span class="fav-value">pizza</span></div>
-        <div class="fav" style="--c:#B4E4B4; --r:1deg"><span class="fav-emoji">🎨</span><span class="fav-label">hobby</span><span class="fav-value">painting</span></div>
-        <div class="fav" style="--c:#FFB5D8; --r:-1.5deg"><span class="fav-emoji">🐶</span><span class="fav-label">animal</span><span class="fav-value">puppies</span></div>
-        <div class="fav" style="--c:#B5DEFF; --r:2deg"><span class="fav-emoji">💜</span><span class="fav-label">color</span><span class="fav-value">purple</span></div>
-        <div class="fav" style="--c:#E7C6FF; --r:-1deg"><span class="fav-emoji">📚</span><span class="fav-label">book</span><span class="fav-value">Dog Man</span></div>
-        <div class="fav" style="--c:#FFF1A5; --r:1.5deg"><span class="fav-emoji">🏫</span><span class="fav-label">subject</span><span class="fav-value">art class</span></div>
+        <div class="fav" style="--c:#FFD6A5; --r:-2deg"><span class="fav-emoji" data-cms="about.favs.0.emoji">🍕</span><span class="fav-label" data-cms="about.favs.0.label">food</span><span class="fav-value" data-cms="about.favs.0.value">pizza</span></div>
+        <div class="fav" style="--c:#B4E4B4; --r:1deg"><span class="fav-emoji" data-cms="about.favs.1.emoji">🎨</span><span class="fav-label" data-cms="about.favs.1.label">hobby</span><span class="fav-value" data-cms="about.favs.1.value">painting</span></div>
+        <div class="fav" style="--c:#FFB5D8; --r:-1.5deg"><span class="fav-emoji" data-cms="about.favs.2.emoji">🐶</span><span class="fav-label" data-cms="about.favs.2.label">animal</span><span class="fav-value" data-cms="about.favs.2.value">puppies</span></div>
+        <div class="fav" style="--c:#B5DEFF; --r:2deg"><span class="fav-emoji" data-cms="about.favs.3.emoji">💜</span><span class="fav-label" data-cms="about.favs.3.label">color</span><span class="fav-value" data-cms="about.favs.3.value">purple</span></div>
+        <div class="fav" style="--c:#E7C6FF; --r:-1deg"><span class="fav-emoji" data-cms="about.favs.4.emoji">📚</span><span class="fav-label" data-cms="about.favs.4.label">book</span><span class="fav-value" data-cms="about.favs.4.value">Dog Man</span></div>
+        <div class="fav" style="--c:#FFF1A5; --r:1.5deg"><span class="fav-emoji" data-cms="about.favs.5.emoji">🏫</span><span class="fav-label" data-cms="about.favs.5.label">subject</span><span class="fav-value" data-cms="about.favs.5.value">art class</span></div>
       </div>
     </div>
   </div>
@@ -138,73 +138,73 @@
 <section id="pictures" class="page page-pictures" data-screen-label="03 Pictures">
   <div class="section-head reveal">
     <span class="tape tape-mint"></span>
-    <h2 class="section-title">My Pictures</h2>
-    <p class="section-dek">tap any picture to see it big!</p>
+    <h2 class="section-title" data-cms="pictures.title">My Pictures</h2>
+    <p class="section-dek" data-cms="pictures.dek">tap any picture to see it big!</p>
   </div>
 
   <div class="sticker-gallery">
     <!-- 9 placeholder photos with different playful backgrounds -->
     <figure class="photo reveal" style="--r:-4deg" data-caption="me at the beach!">
-      <div class="photo-inner" style="background:linear-gradient(160deg,#7DD3FC 0%, #FFD23F 100%);">
+      <div class="photo-inner" data-cms-img="pictures.photos.0.image" style="background:linear-gradient(160deg,#7DD3FC 0%, #FFD23F 100%);">
         <svg viewBox="0 0 200 200"><circle cx="150" cy="50" r="25" fill="#FFE5A5"/><path d="M0 140 Q 100 110 200 140 L 200 200 L 0 200 Z" fill="#F4E4BC"/><path d="M0 155 Q 100 140 200 160 L 200 200 L 0 200 Z" fill="#D9B382" opacity="0.5"/></svg>
       </div>
-      <figcaption>beach day 🌊</figcaption>
+      <figcaption data-cms="pictures.photos.0.caption">beach day 🌊</figcaption>
     </figure>
 
     <figure class="photo reveal" style="--r:2deg" data-caption="my birthday cake">
-      <div class="photo-inner" style="background:linear-gradient(160deg,#FFB5D8,#FF3D7F);">
+      <div class="photo-inner" data-cms-img="pictures.photos.1.image" style="background:linear-gradient(160deg,#FFB5D8,#FF3D7F);">
         <svg viewBox="0 0 200 200"><rect x="50" y="100" width="100" height="60" fill="#FFE5A5" stroke="#1a1a2e" stroke-width="4"/><rect x="60" y="80" width="80" height="25" fill="#FFB5D8" stroke="#1a1a2e" stroke-width="4"/><rect x="95" y="55" width="10" height="30" fill="#FFD23F" stroke="#1a1a2e" stroke-width="3"/><path d="M100 55 Q 95 45 100 40 Q 105 45 100 55 Z" fill="#FF3D7F"/></svg>
       </div>
-      <figcaption>8th birthday! 🎂</figcaption>
+      <figcaption data-cms="pictures.photos.1.caption">8th birthday! 🎂</figcaption>
     </figure>
 
     <figure class="photo reveal" style="--r:-1.5deg" data-caption="art i made">
-      <div class="photo-inner" style="background:linear-gradient(160deg,#E7C6FF,#C084FC);">
+      <div class="photo-inner" data-cms-img="pictures.photos.2.image" style="background:linear-gradient(160deg,#E7C6FF,#C084FC);">
         <svg viewBox="0 0 200 200"><rect x="30" y="30" width="140" height="140" fill="#fff" stroke="#1a1a2e" stroke-width="4"/><circle cx="80" cy="80" r="20" fill="#FF3D7F"/><circle cx="130" cy="100" r="15" fill="#FFD23F"/><rect x="60" y="120" width="80" height="30" fill="#7DD3FC"/><path d="M50 50 L 160 150" stroke="#1a1a2e" stroke-width="3"/></svg>
       </div>
-      <figcaption>my painting 🎨</figcaption>
+      <figcaption data-cms="pictures.photos.2.caption">my painting 🎨</figcaption>
     </figure>
 
     <figure class="photo reveal" style="--r:3deg" data-caption="puppy snuggles">
-      <div class="photo-inner" style="background:linear-gradient(160deg,#FFE5A5,#FFB584);">
+      <div class="photo-inner" data-cms-img="pictures.photos.3.image" style="background:linear-gradient(160deg,#FFE5A5,#FFB584);">
         <svg viewBox="0 0 200 200"><ellipse cx="100" cy="120" rx="60" ry="45" fill="#D9B382" stroke="#1a1a2e" stroke-width="4"/><ellipse cx="70" cy="85" rx="20" ry="30" fill="#D9B382" stroke="#1a1a2e" stroke-width="4"/><ellipse cx="130" cy="85" rx="20" ry="30" fill="#D9B382" stroke="#1a1a2e" stroke-width="4"/><circle cx="85" cy="115" r="4" fill="#1a1a2e"/><circle cx="115" cy="115" r="4" fill="#1a1a2e"/><ellipse cx="100" cy="130" rx="7" ry="5" fill="#1a1a2e"/><path d="M90 138 Q 100 148 110 138" fill="none" stroke="#1a1a2e" stroke-width="3" stroke-linecap="round"/></svg>
       </div>
-      <figcaption>snuggles 🐶</figcaption>
+      <figcaption data-cms="pictures.photos.3.caption">snuggles 🐶</figcaption>
     </figure>
 
     <figure class="photo reveal" style="--r:-2.5deg" data-caption="me and my bestie">
-      <div class="photo-inner" style="background:linear-gradient(160deg,#B4E4B4,#7DD3FC);">
+      <div class="photo-inner" data-cms-img="pictures.photos.4.image" style="background:linear-gradient(160deg,#B4E4B4,#7DD3FC);">
         <svg viewBox="0 0 200 200"><circle cx="70" cy="80" r="28" fill="#FFD6A5" stroke="#1a1a2e" stroke-width="4"/><circle cx="130" cy="80" r="28" fill="#FFD6A5" stroke="#1a1a2e" stroke-width="4"/><path d="M35 200 Q 35 130 70 130 Q 105 130 105 200 Z" fill="#FF3D7F" stroke="#1a1a2e" stroke-width="4"/><path d="M95 200 Q 95 130 130 130 Q 165 130 165 200 Z" fill="#C084FC" stroke="#1a1a2e" stroke-width="4"/><circle cx="63" cy="78" r="3" fill="#1a1a2e"/><circle cx="77" cy="78" r="3" fill="#1a1a2e"/><circle cx="123" cy="78" r="3" fill="#1a1a2e"/><circle cx="137" cy="78" r="3" fill="#1a1a2e"/></svg>
       </div>
-      <figcaption>best friends 💕</figcaption>
+      <figcaption data-cms="pictures.photos.4.caption">best friends 💕</figcaption>
     </figure>
 
     <figure class="photo reveal" style="--r:1.8deg" data-caption="halloween!">
-      <div class="photo-inner" style="background:linear-gradient(160deg,#C084FC,#1a1a2e);">
+      <div class="photo-inner" data-cms-img="pictures.photos.5.image" style="background:linear-gradient(160deg,#C084FC,#1a1a2e);">
         <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="55" fill="#FF8C42" stroke="#1a1a2e" stroke-width="4"/><polygon points="80,85 95,95 70,95" fill="#1a1a2e"/><polygon points="120,85 130,95 105,95" fill="#1a1a2e"/><path d="M70 120 L 80 115 L 90 120 L 100 115 L 110 120 L 120 115 L 130 120 L 125 130 L 75 130 Z" fill="#1a1a2e"/><rect x="95" y="40" width="10" height="15" fill="#2d5016"/></svg>
       </div>
-      <figcaption>halloween 🎃</figcaption>
+      <figcaption data-cms="pictures.photos.5.caption">halloween 🎃</figcaption>
     </figure>
 
     <figure class="photo reveal" style="--r:-3deg" data-caption="ice cream day">
-      <div class="photo-inner" style="background:linear-gradient(160deg,#FFB5D8,#FFF1A5);">
+      <div class="photo-inner" data-cms-img="pictures.photos.6.image" style="background:linear-gradient(160deg,#FFB5D8,#FFF1A5);">
         <svg viewBox="0 0 200 200"><path d="M70 90 L 130 90 L 110 180 L 90 180 Z" fill="#D9B382" stroke="#1a1a2e" stroke-width="4"/><circle cx="85" cy="80" r="22" fill="#FFB5D8" stroke="#1a1a2e" stroke-width="4"/><circle cx="115" cy="80" r="22" fill="#FFF1A5" stroke="#1a1a2e" stroke-width="4"/><circle cx="100" cy="55" r="22" fill="#B4E4B4" stroke="#1a1a2e" stroke-width="4"/><circle cx="80" cy="65" r="3" fill="#FF3D7F"/><circle cx="115" cy="50" r="3" fill="#FF3D7F"/><circle cx="95" cy="85" r="3" fill="#FF3D7F"/></svg>
       </div>
-      <figcaption>ice cream!! 🍦</figcaption>
+      <figcaption data-cms="pictures.photos.6.caption">ice cream!! 🍦</figcaption>
     </figure>
 
     <figure class="photo reveal" style="--r:2.5deg" data-caption="bike ride">
-      <div class="photo-inner" style="background:linear-gradient(160deg,#7DD3FC,#B4E4B4);">
+      <div class="photo-inner" data-cms-img="pictures.photos.7.image" style="background:linear-gradient(160deg,#7DD3FC,#B4E4B4);">
         <svg viewBox="0 0 200 200"><circle cx="55" cy="140" r="28" fill="none" stroke="#1a1a2e" stroke-width="5"/><circle cx="145" cy="140" r="28" fill="none" stroke="#1a1a2e" stroke-width="5"/><path d="M55 140 L 100 90 L 145 140 M 100 90 L 110 70 M 80 140 L 120 140" stroke="#1a1a2e" stroke-width="5" fill="none" stroke-linecap="round"/><circle cx="110" cy="65" r="8" fill="#FF3D7F" stroke="#1a1a2e" stroke-width="3"/></svg>
       </div>
-      <figcaption>zoom 🚴‍♀️</figcaption>
+      <figcaption data-cms="pictures.photos.7.caption">zoom 🚴‍♀️</figcaption>
     </figure>
 
     <figure class="photo reveal" style="--r:-1deg" data-caption="sleepover squad">
-      <div class="photo-inner" style="background:linear-gradient(160deg,#FFD23F,#FF3D7F);">
+      <div class="photo-inner" data-cms-img="pictures.photos.8.image" style="background:linear-gradient(160deg,#FFD23F,#FF3D7F);">
         <svg viewBox="0 0 200 200"><path d="M40 160 L 40 100 Q 40 80 60 80 L 140 80 Q 160 80 160 100 L 160 160 Z" fill="#E7C6FF" stroke="#1a1a2e" stroke-width="4"/><rect x="30" y="155" width="140" height="15" fill="#C084FC" stroke="#1a1a2e" stroke-width="4"/><circle cx="75" cy="115" r="12" fill="#FFD6A5" stroke="#1a1a2e" stroke-width="3"/><circle cx="125" cy="115" r="12" fill="#FFD6A5" stroke="#1a1a2e" stroke-width="3"/><path d="M60 60 L 80 80 M 120 80 L 140 60" stroke="#1a1a2e" stroke-width="4" stroke-linecap="round"/></svg>
       </div>
-      <figcaption>sleepover ✨</figcaption>
+      <figcaption data-cms="pictures.photos.8.caption">sleepover ✨</figcaption>
     </figure>
   </div>
 </section>
@@ -214,8 +214,8 @@
 <section id="players" class="page page-players" data-screen-label="04 Players">
   <div class="section-head reveal">
     <span class="tape tape-pink"></span>
-    <h2 class="section-title">Players 🫧</h2>
-    <p class="section-dek">log in to see your slime stats and your friends!</p>
+    <h2 class="section-title" data-cms="players.title">Players 🫧</h2>
+    <p class="section-dek" data-cms="players.dek">log in to see your slime stats and your friends!</p>
   </div>
 
   <!-- Logged out: same login as the slime game -->
@@ -248,8 +248,8 @@
 <section id="slime" class="page page-slime" data-screen-label="05 Slime Maker">
   <div class="section-head reveal">
     <span class="tape tape-yellow"></span>
-    <h2 class="section-title">Slime Maker ✨</h2>
-    <p class="section-dek">i made a whole game for this!!</p>
+    <h2 class="section-title" data-cms="slime.title">Slime Maker ✨</h2>
+    <p class="section-dek" data-cms="slime.dek">i made a whole game for this!!</p>
   </div>
 
   <div class="slime-cta reveal">
@@ -285,10 +285,10 @@
     </div>
 
     <div class="slime-cta-copy">
-      <p class="slime-cta-kicker">✨ play the game ✨</p>
-      <h3 class="slime-cta-title">my <span class="hl hl-pink">slime maker</span> is its own whole thing!</h3>
-      <p class="slime-cta-text">pick a color, add glitter, toss in charms, and make the coolest slime ever. click the button to play!</p>
-      <a href="/slimemaker" class="btn btn-primary btn-big slime-cta-btn">🧪 open slime maker →</a>
+      <p class="slime-cta-kicker" data-cms="slime.ctaKicker">✨ play the game ✨</p>
+      <h3 class="slime-cta-title" data-cms="slime.ctaTitle">my slime maker is its own whole thing!</h3>
+      <p class="slime-cta-text" data-cms="slime.ctaText">pick a color, add glitter, toss in charms, and make the coolest slime ever. click the button to play!</p>
+      <a href="/slimemaker" class="btn btn-primary btn-big slime-cta-btn" data-cms="slime.ctaBtn">🧪 open slime maker →</a>
     </div>
   </div>
 </section>
