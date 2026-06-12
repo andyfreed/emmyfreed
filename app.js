@@ -271,16 +271,23 @@ async function loadEveryone(myId) {
 }
 
 /* ============================ VIEW SWITCHING ============================ */
+function setAdminNav(isAdmin) {
+  const item = document.getElementById('nav-admin-item');
+  if (item) item.hidden = !isAdmin;
+}
+
 function showSignedOut() {
   $('players-signin').hidden = false;
   $('players-signin').classList.add('in'); // reveal even if it was hidden at load
   $('players-app').hidden = true;
+  setAdminNav(false);
 }
 
 async function showSignedIn(prof) {
   $('players-signin').hidden = true;
   $('players-app').hidden = false;
   $('me-card').classList.add('in');
+  setAdminNav(!!prof.is_admin);
   const players = await loadEveryone(prof.id);
   const me = players.find((p) => p.id === prof.id) || { ...prof, slimes: [] };
   renderMeCard(prof, me.slimes.length);
