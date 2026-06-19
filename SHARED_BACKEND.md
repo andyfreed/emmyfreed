@@ -79,6 +79,24 @@ them. They are now tightened to **logged-in users only**:
 - A **`/admin` editor**: an admin (`is_admin = true`) edits the site text,
   which writes to `site_content`.
 
+## Website-only tables (the game can ignore these)
+
+These were added for website features. They are **additive** — they don't touch
+the game's tables or auth, so the game needs no changes:
+
+- **`slime_votes`** — friends "heart" each other's slimes. `(slime_id → slimes,
+  user_id → profiles, unique(slime_id, user_id))`. RLS: any logged-in friend
+  can read; insert/delete own votes only.
+- **`guestbook`** — one short note per kid on the homepage. `(user_id PK →
+  profiles, username, body ≤200 chars)`. RLS: friends read; write/edit own;
+  delete own or admin.
+- **`profiles.birthday`** — new nullable `text` column, **`MM-DD` only** (no
+  year), enforced by a check constraint. Opt-in; used for birthday shout-outs.
+  ⚠️ The game's profile inserts/updates are unaffected (column is nullable), but
+  if the game ever writes `birthday`, it must be `MM-DD` or the write is rejected.
+- **`public.is_site_admin()`** — a `SECURITY DEFINER` helper used by storage and
+  guestbook policies; returns true if the caller is an admin.
+
 ## Coordinate going forward
 
 Changes to the **auth scheme**, the **`profiles`/`slimes` schema**, or **RLS**

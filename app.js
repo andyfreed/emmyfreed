@@ -30,6 +30,13 @@ const esc = (s) =>
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])
   );
 
+/* ============================ SHARED STATE ============================ */
+let MY_ID = null;            // current user's profile id
+let ALL_PLAYERS = [];        // everyone, with their slimes attached
+let modalPlayer = null;      // player currently shown in the profile modal
+let guestbookEntries = [];   // guestbook rows
+const voteState = new Map(); // slime_id -> { count, mine }
+
 /* ============================ EDITABLE TEXT ============================ */
 // Pull the site's editable text from Supabase (so Emmy's edits show up
 // instantly), falling back to the committed JSON if Supabase is unreachable.
@@ -227,11 +234,50 @@ function renderMeCard(prof, slimeCount) {
     (prof.created_at ? statChip('📅', `since ${memberSince(prof.created_at)}`) : '') +
     `</div>` +
     badgesHtml(stats) +
+    birthdayControlHtml(prof) +
     `<div class="me-play-row">` +
     `<a href="/chat" class="btn btn-primary me-play-btn">💬 open chat</a>` +
     `<a href="/slimemaker" class="btn btn-primary me-play-btn">🧪 make more slime →</a>` +
     `</div>`;
   $('signout-btn').addEventListener('click', signOutAndRefresh);
+  wireBirthday();
+}
+
+function birthdayControlHtml(prof) {
+  const pretty = prettyBirthday(prof.birthday);
+  return (
+    `<div class="bday-row">` +
+    (pretty
+      ? `<button type="button" class="bday-chip" id="bday-edit">🎂 my birthday: ${esc(pretty)} <span class="bday-pencil">✎</span></button>`
+      : `<button type="button" class="bday-chip add" id="bday-edit">🎂 add my birthday</button>`) +
+    `<div class="bday-editor" id="bday-editor" hidden>` +
+    `<input type="date" id="bday-input" class="bday-input" />` +
+    `<button type="button" class="bday-save" id="bday-save">save</button>` +
+    `<button type="button" class="bday-cancel" id="bday-cancel">cancel</button>` +
+    `<span class="bday-note">we only keep the month & day 💜</span>` +
+    `</div></div>`
+  );
+}
+
+function wireBirthday() {
+  const editBtn = $('bday-edit');
+  const editor = $('bday-editor');
+  if (!editBtn || !editor) return;
+  editBtn.addEventListener('click', () => {
+    editor.hidden = !editor.hidden;
+    if (!editor.hidden) $('bday-input').focus();
+  });
+  $('bday-cancel').addEventListener('click', () => { editor.hidden = true; });
+  $('bday-save').addEventListener('click', async () => {
+    const val = $('bday-input').value; // yyyy-mm-dd
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(val)) { editor.hidden = true; return; }
+    const mmdd = val.slice(5); // mm-dd only — never store the year
+    const btn = $('bday-save');
+    btn.disabled = true;
+    const { error } = await sb.from('profiles').update({ birthday: mmdd }).eq('id', MY_ID);
+    btn.disabled = false;
+    if (!error) refresh();
+  });
 }
 
 function renderPlayersGrid(players) {
@@ -287,15 +333,61 @@ function renderWhatsNew(players) {
     `</div>`;
 }
 
+function renderBirthdayBanner(players, today) {
+  const box = $('bday-banner');
+  if (!box) return;
+  const names = players.filter((p) => p.birthday === today).map((p) => p.username);
+  if (!names.length) { box.hidden = true; box.innerHTML = ''; return; }
+  const who = names.length === 1 ? `${esc(names[0])}'s` : `${names.map(esc).join(' & ')}'s`;
+  box.hidden = false;
+  box.innerHTML =
+    `<span class="bday-confetti" aria-hidden="true">🎉🎂🎈</span>` +
+    `<span class="bday-text">it's ${who} birthday today! 🥳</span>` +
+    `<span class="bday-confetti" aria-hidden="true">🎈🎂🎉</span>`;
+}
+
+// "Most-loved slimes 🏆" — all-time top 3 by hearts (hidden until something has a heart).
+function renderMostLoved() {
+  const box = $('most-loved');
+  if (!box) return;
+  const ranked = ALL_PLAYERS
+    .flatMap((p) => p.slimes.map((s) => ({ ...s, username: p.username, hearts: (voteState.get(s.id) || {}).count || 0 })))
+    .filter((s) => s.hearts > 0)
+    .sort((a, b) => b.hearts - a.hearts)
+    .slice(0, 3);
+  if (!ranked.length) { box.innerHTML = ''; return; }
+  const medals = ['🥇', '🥈', '🥉'];
+  box.innerHTML =
+    `<h3 class="most-loved-title">most-loved slimes 🏆</h3>` +
+    `<div class="most-loved-row">` +
+    ranked
+      .map(
+        (s, i) =>
+          `<div class="most-loved-item">` +
+          `<span class="most-loved-medal">${medals[i]}</span>` +
+          slimeBlob(s.color, s.sparkle, s.charm, 44) +
+          `<span class="most-loved-info"><b>${esc(s.name || 'slime')}</b><span>by ${esc(s.username)}</span></span>` +
+          `<span class="most-loved-hearts">💖 ${s.hearts}</span>` +
+          `</div>`
+      )
+      .join('') +
+    `</div>`;
+}
+
 function openPlayerModal(p) {
+  modalPlayer = p;
   const slimes = p.slimes
-    .map(
-      (s) =>
+    .map((s) => {
+      const v = voteState.get(s.id) || { count: 0, mine: false };
+      return (
         `<div class="modal-slime">` +
         slimeBlob(s.color, s.sparkle, s.charm, 64) +
         `<span class="modal-slime-name">${esc(s.name || 'slime')}</span>` +
+        `<button class="heart-btn ${v.mine ? 'mine' : ''}" data-heart="${esc(s.id)}" aria-pressed="${v.mine}">` +
+        `💖 <span>${v.count}</span></button>` +
         `</div>`
-    )
+      );
+    })
     .join('');
   const stats = statsOf(p, p.slimes.length);
   $('player-modal-body').innerHTML =
@@ -320,13 +412,103 @@ function closePlayerModal() {
   const modal = $('player-modal');
   modal.classList.remove('open');
   modal.setAttribute('aria-hidden', 'true');
+  modalPlayer = null;
+}
+
+// Heart / un-heart a friend's slime (optimistic; reverts on error).
+async function toggleHeart(slimeId) {
+  if (!MY_ID) return;
+  const v = voteState.get(slimeId) || { count: 0, mine: false };
+  const wasMine = v.mine;
+  v.mine = !wasMine;
+  v.count = Math.max(0, v.count + (wasMine ? -1 : 1));
+  voteState.set(slimeId, v);
+  if (modalPlayer) openPlayerModal(modalPlayer);
+  renderMostLoved();
+  const res = wasMine
+    ? await sb.from('slime_votes').delete().eq('slime_id', slimeId).eq('user_id', MY_ID)
+    : await sb.from('slime_votes').insert({ slime_id: slimeId, user_id: MY_ID });
+  if (res.error) {
+    // revert on failure
+    v.mine = wasMine;
+    v.count = Math.max(0, v.count + (wasMine ? 1 : -1));
+    voteState.set(slimeId, v);
+    if (modalPlayer) openPlayerModal(modalPlayer);
+    renderMostLoved();
+  }
+}
+
+/* ============================== GUESTBOOK ============================== */
+const NOTE_COLORS = ['#FFF1A5', '#FFB5D8', '#B4E4B4', '#7DD3FC', '#E7C6FF', '#FFD6A5'];
+function noteColor(name) {
+  let h = 0;
+  for (const c of String(name)) h = (h * 31 + c.charCodeAt(0)) >>> 0;
+  return NOTE_COLORS[h % NOTE_COLORS.length];
+}
+function renderGuestbook(prof) {
+  const box = $('guestbook');
+  if (!box) return;
+  const mine = guestbookEntries.find((g) => g.user_id === prof.id);
+  const notes = guestbookEntries
+    .map((g) => {
+      const canDelete = g.user_id === prof.id || prof.is_admin;
+      return (
+        `<div class="gb-note" style="--c:${noteColor(g.username)}">` +
+        `<p class="gb-body">${esc(g.body)}</p>` +
+        `<p class="gb-by">— ${esc(g.username)}</p>` +
+        (canDelete ? `<button class="gb-del" data-gbdel="${esc(g.user_id)}" aria-label="Delete note">✕</button>` : '') +
+        `</div>`
+      );
+    })
+    .join('');
+  box.innerHTML =
+    `<h3 class="gb-title">friends' guestbook 📝</h3>` +
+    `<div class="gb-composer">` +
+    `<textarea id="gb-input" maxlength="200" placeholder="leave a nice note for everyone…">${esc(mine ? mine.body : '')}</textarea>` +
+    `<button type="button" class="btn btn-primary gb-save" id="gb-save">${mine ? 'update my note ✍️' : 'sign the guestbook ✍️'}</button>` +
+    `</div>` +
+    (notes ? `<div class="gb-wall">${notes}</div>` : emptyState('📝', 'no notes yet!', 'be the first to sign the guestbook'));
+  wireGuestbook(prof);
+}
+function wireGuestbook(prof) {
+  const save = $('gb-save');
+  if (save) {
+    save.addEventListener('click', async () => {
+      const body = ($('gb-input').value || '').trim();
+      if (!body) return;
+      save.disabled = true;
+      const { error } = await sb
+        .from('guestbook')
+        .upsert({ user_id: prof.id, username: prof.username, body, updated_at: new Date().toISOString() });
+      save.disabled = false;
+      if (!error) refresh();
+    });
+  }
+  $('guestbook').querySelectorAll('[data-gbdel]').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const uid = btn.getAttribute('data-gbdel');
+      const { error } = await sb.from('guestbook').delete().eq('user_id', uid);
+      if (!error) refresh();
+    });
+  });
 }
 
 async function loadEveryone(myId) {
-  const [{ data: profiles }, { data: slimes }] = await Promise.all([
+  const [{ data: profiles }, { data: slimes }, { data: votes }, { data: guests }] = await Promise.all([
     sb.from('profiles').select('*'),
     sb.from('slimes').select('id, user_id, name, color, sparkle, charm, created_at'),
+    sb.from('slime_votes').select('slime_id, user_id'),
+    sb.from('guestbook').select('*').order('created_at', { ascending: false }),
   ]);
+  // Tally hearts per slime, and whether I hearted it.
+  voteState.clear();
+  (votes || []).forEach((v) => {
+    const e = voteState.get(v.slime_id) || { count: 0, mine: false };
+    e.count++;
+    if (v.user_id === myId) e.mine = true;
+    voteState.set(v.slime_id, e);
+  });
+  guestbookEntries = guests || [];
   const byUser = new Map();
   (slimes || [])
     .sort((a, b) => (b.created_at > a.created_at ? 1 : -1))
@@ -386,11 +568,36 @@ async function showSignedIn(prof) {
   $('me-card').classList.add('in');
   setAdminNav(!!prof.is_admin);
   setAuthNav(prof);
-  const players = await loadEveryone(prof.id);
+  MY_ID = prof.id;
+  let players = await loadEveryone(prof.id);
+  // Birthday kids float to the very top today.
+  const today = todayMMDD();
+  players = players.slice().sort((a, b) => {
+    const ab = a.birthday === today ? 1 : 0;
+    const bb = b.birthday === today ? 1 : 0;
+    if (ab !== bb) return bb - ab;
+    return 0;
+  });
+  ALL_PLAYERS = players;
   const me = players.find((p) => p.id === prof.id) || { ...prof, slimes: [] };
+  renderBirthdayBanner(players, today);
   renderMeCard(prof, me.slimes.length);
   renderWhatsNew(players);
+  renderMostLoved();
   renderPlayersGrid(players);
+  renderGuestbook(prof);
+}
+
+function todayMMDD() {
+  const d = new Date();
+  return String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function prettyBirthday(mmdd) {
+  if (!/^\d{2}-\d{2}$/.test(mmdd || '')) return '';
+  const [m, d] = mmdd.split('-').map(Number);
+  if (m < 1 || m > 12) return '';
+  return `${MONTHS[m - 1]} ${d}`;
 }
 
 async function refresh() {
@@ -474,6 +681,8 @@ function wire() {
   const modal = $('player-modal');
   if (modal) {
     modal.addEventListener('click', (e) => {
+      const heart = e.target.closest('[data-heart]');
+      if (heart) { toggleHeart(heart.getAttribute('data-heart')); return; }
       if (e.target === modal || e.target.closest('.player-modal-close')) closePlayerModal();
     });
     document.addEventListener('keydown', (e) => {

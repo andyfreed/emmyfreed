@@ -838,6 +838,85 @@ body {
 .whats-new-text { font-weight: 700; font-size: 15px; }
 .whats-new-text b { font-family: 'Lilita One', sans-serif; font-weight: 400; }
 
+/* ============ HEART A SLIME ============ */
+.heart-btn {
+  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 13px; color: var(--ink);
+  background: #fff; border: 2.5px solid var(--ink); border-radius: 999px; padding: 3px 10px;
+  cursor: pointer; box-shadow: var(--shadow-pop-sm); transition: transform .08s; display: inline-flex; gap: 3px; align-items: center;
+}
+.heart-btn:active { transform: scale(0.9); }
+.heart-btn.mine { background: var(--pink-soft); }
+
+/* ============ MOST-LOVED SLIMES ============ */
+.most-loved { max-width: 640px; margin: 0 auto 34px; }
+.most-loved:empty { display: none; }
+.most-loved-title { font-family: 'Lilita One', sans-serif; font-size: 20px; text-align: center; margin: 0 0 12px; }
+.most-loved-row { display: flex; flex-direction: column; gap: 8px; }
+.most-loved-item {
+  display: flex; align-items: center; gap: 12px;
+  background: #fff; border: 2.5px solid var(--ink); border-radius: 14px; box-shadow: var(--shadow-pop-sm); padding: 8px 14px;
+}
+.most-loved-medal { font-size: 22px; flex: none; }
+.most-loved-info { display: flex; flex-direction: column; line-height: 1.2; flex: 1; min-width: 0; }
+.most-loved-info b { font-family: 'Lilita One', sans-serif; font-weight: 400; font-size: 16px; }
+.most-loved-info span { font-weight: 700; font-size: 12px; color: var(--ink-soft); }
+.most-loved-hearts { font-weight: 800; font-size: 14px; white-space: nowrap; }
+
+/* ============ BIRTHDAY ============ */
+.bday-row { margin-top: 14px; }
+.bday-chip {
+  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 14px; color: var(--ink);
+  background: #fff; border: 2.5px solid var(--ink); border-radius: 999px; padding: 6px 14px;
+  cursor: pointer; box-shadow: var(--shadow-pop-sm);
+}
+.bday-chip.add { background: var(--lav-soft); }
+.bday-pencil { opacity: .6; }
+.bday-editor { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 10px; }
+.bday-input {
+  font-family: 'Nunito', sans-serif; font-weight: 700; font-size: 15px; color: var(--ink);
+  border: 2.5px solid var(--ink); border-radius: 10px; padding: 7px 10px; background: #fff;
+}
+.bday-save, .bday-cancel {
+  font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 14px; border: 2.5px solid var(--ink);
+  border-radius: 999px; padding: 6px 14px; cursor: pointer; box-shadow: var(--shadow-pop-sm);
+}
+.bday-save { background: var(--mint); }
+.bday-cancel { background: #fff; }
+.bday-note { font-weight: 700; font-size: 12px; color: var(--ink-soft); flex-basis: 100%; }
+
+.bday-banner {
+  display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap;
+  background: linear-gradient(135deg, var(--yellow), var(--pink-soft));
+  border: 3px solid var(--ink); border-radius: var(--radius); box-shadow: var(--shadow-pop);
+  padding: 14px 18px; margin: 0 auto 24px; max-width: 640px; text-align: center;
+}
+.bday-text { font-family: 'Lilita One', sans-serif; font-size: 20px; }
+.bday-confetti { font-size: 20px; animation: emptyBob 1.8s ease-in-out infinite; }
+
+/* ============ GUESTBOOK ============ */
+.guestbook { max-width: 760px; margin: 44px auto 0; }
+.gb-title { font-family: 'Lilita One', sans-serif; font-size: 24px; text-align: center; margin: 0 0 18px; }
+.gb-composer { display: flex; flex-direction: column; gap: 10px; max-width: 460px; margin: 0 auto 26px; }
+.gb-composer textarea {
+  font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 600; color: var(--ink);
+  border: 2.5px solid var(--ink); border-radius: 14px; padding: 12px 14px; background: #fff; resize: vertical; min-height: 64px;
+}
+.gb-composer textarea:focus { outline: none; border-color: var(--pink); box-shadow: 0 0 0 3px var(--pink-soft); }
+.gb-save { align-self: center; }
+.gb-wall { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
+.gb-note {
+  position: relative; background: var(--c, var(--yellow-soft));
+  border: 2.5px solid var(--ink); border-radius: 8px; box-shadow: var(--shadow-pop-sm);
+  padding: 16px 14px 12px; transform: rotate(-1.5deg);
+}
+.gb-note:nth-child(even) { transform: rotate(1.5deg); }
+.gb-body { font-family: 'Caveat', cursive; font-size: 21px; font-weight: 700; margin: 0 0 8px; word-break: break-word; line-height: 1.25; }
+.gb-by { font-weight: 800; font-size: 13px; color: var(--ink-soft); margin: 0; text-align: right; }
+.gb-del {
+  position: absolute; top: 6px; right: 6px; width: 24px; height: 24px; border-radius: 50%;
+  background: #fff; border: 2px solid var(--ink); cursor: pointer; font-size: 12px; font-weight: 800; line-height: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .empty-emoji { animation: none !important; }
+  .empty-emoji, .bday-confetti { animation: none !important; }
 }
