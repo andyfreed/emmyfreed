@@ -87,6 +87,21 @@ body {
   background: var(--ink); color: var(--paper);
   transform: rotate(-2deg);
 }
+.nav-links .nav-auth-btn {
+  display: inline-block;
+  font-family: inherit; font-weight: 800; font-size: 14px;
+  padding: 8px 14px; border-radius: 999px;
+  background: var(--pink); color: #fff;
+  border: 2.5px solid var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform .08s, box-shadow .08s, background .15s;
+}
+.nav-links .nav-auth-btn:hover { background: var(--pink); transform: translateY(-1px); }
+.nav-links .nav-auth-btn:active { transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--ink); }
+.nav-links .nav-auth-out { background: #fff; color: var(--ink); }
+.nav-links .nav-auth-out:hover { background: var(--yellow-soft); }
 .nav-toggle {
   display: none;
   background: none; border: none; cursor: pointer;

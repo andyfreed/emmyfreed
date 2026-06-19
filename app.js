@@ -276,11 +276,27 @@ function setAdminNav(isAdmin) {
   if (item) item.hidden = !isAdmin;
 }
 
+function setAuthNav(prof) {
+  const out = document.getElementById('nav-auth-loggedout');
+  const inn = document.getElementById('nav-auth-loggedin');
+  const name = document.getElementById('nav-username');
+  if (!out || !inn) return;
+  if (prof) {
+    out.hidden = true;
+    inn.hidden = false;
+    if (name) name.textContent = prof.username || 'friend';
+  } else {
+    out.hidden = false;
+    inn.hidden = true;
+  }
+}
+
 function showSignedOut() {
   $('players-signin').hidden = false;
   $('players-signin').classList.add('in'); // reveal even if it was hidden at load
   $('players-app').hidden = true;
   setAdminNav(false);
+  setAuthNav(null);
 }
 
 async function showSignedIn(prof) {
@@ -288,6 +304,7 @@ async function showSignedIn(prof) {
   $('players-app').hidden = false;
   $('me-card').classList.add('in');
   setAdminNav(!!prof.is_admin);
+  setAuthNav(prof);
   const players = await loadEveryone(prof.id);
   const me = players.find((p) => p.id === prof.id) || { ...prof, slimes: [] };
   renderMeCard(prof, me.slimes.length);
@@ -320,6 +337,14 @@ function wire() {
   document.querySelectorAll('.auth-tab').forEach((tab) =>
     tab.addEventListener('click', () => setAuthMode(tab.getAttribute('data-mode')))
   );
+
+  const navOut = document.getElementById('nav-signout-btn');
+  if (navOut) {
+    navOut.addEventListener('click', async () => {
+      await logOut();
+      showSignedOut();
+    });
+  }
 
   const form = $('login-form');
   if (form) {
