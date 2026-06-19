@@ -110,7 +110,7 @@ async function ensureProfile(username) {
 async function logIn(rawName, code) {
   const { username, email, password } = validateCreds(rawName, code);
   const { error } = await sb.auth.signInWithPassword({ email, password });
-  if (error) throw new Error("That name and code don't match. New here? Tap “Create account.”");
+  if (error) { const e = new Error("That name and code don't match."); e.offerSignup = true; throw e; }
   return ensureProfile(username);
 }
 
@@ -162,35 +162,82 @@ function statChip(emoji, label) {
   return `<span class="stat-chip">${emoji} ${esc(label)}</span>`;
 }
 
+// A bouncy, on-brand empty state (dashed card + big bobbing emoji).
+function emptyState(emoji, title, sub) {
+  return (
+    `<div class="empty-card">` +
+    `<span class="empty-emoji">${emoji}</span>` +
+    `<p class="empty-title">${esc(title)}</p>` +
+    (sub ? `<p class="empty-sub">${esc(sub)}</p>` : '') +
+    `</div>`
+  );
+}
+
+/* ---- Achievement badges (computed from stats kids already have) ---- */
+const BADGES = [
+  { emoji: '🫧', label: 'First Slime',    test: (s) => s.slimes >= 1 },
+  { emoji: '✨', label: 'Sparkle Star',   test: (s) => s.sparkles >= 1 },
+  { emoji: '🎀', label: 'Charm Charmer',  test: (s) => s.charms >= 1 },
+  { emoji: '🎨', label: 'Color Picker',   test: (s) => s.colors >= 3 },
+  { emoji: '🖐️', label: 'High Five',      test: (s) => s.slimes >= 5 },
+  { emoji: '🌈', label: 'Rainbow Maker',  test: (s) => s.colors >= 8 },
+  { emoji: '🪙', label: 'Coin Collector', test: (s) => s.coins >= 500 },
+  { emoji: '🏆', label: 'Slime Master',   test: (s) => s.slimes >= 20 },
+  { emoji: '💎', label: 'Slime Legend',   test: (s) => s.slimes >= 40 },
+  { emoji: '👑', label: 'Coin Champion',  test: (s) => s.coins >= 1000 },
+];
+function statsOf(p, slimeCount) {
+  return {
+    coins: p.coins ?? 0,
+    colors: (p.owned_colors || []).length,
+    sparkles: (p.owned_sparkles || []).filter((x) => x && x !== 'none').length,
+    charms: (p.owned_charms || []).filter((x) => x && x !== 'none').length,
+    slimes: slimeCount,
+  };
+}
+function badgesHtml(stats) {
+  const earned = BADGES.filter((b) => b.test(stats));
+  if (!earned.length) return '';
+  return (
+    `<div class="badges">` +
+    earned
+      .map(
+        (b) =>
+          `<span class="badge" title="${esc(b.label)}"><span class="badge-emoji">${b.emoji}</span>` +
+          `<span class="badge-label">${esc(b.label)}</span></span>`
+      )
+      .join('') +
+    `</div>`
+  );
+}
+
 function renderMeCard(prof, slimeCount) {
-  const colors = (prof.owned_colors || []).length;
-  const sparkles = (prof.owned_sparkles || []).filter((s) => s && s !== 'none').length;
-  const charms = (prof.owned_charms || []).filter((c) => c && c !== 'none').length;
+  const stats = statsOf(prof, slimeCount);
   $('me-card').innerHTML =
     `<div class="me-card-top">` +
     `<h3 class="me-hi">hi, ${esc(prof.username)}! 👋</h3>` +
     `<button class="signout-btn" id="signout-btn">sign out</button>` +
     `</div>` +
     `<div class="stat-chips">` +
-    statChip('🪙', `${prof.coins ?? 0} coins`) +
+    statChip('🪙', `${stats.coins} coins`) +
     statChip('🫧', `${slimeCount} slime${slimeCount === 1 ? '' : 's'}`) +
-    statChip('🎨', `${colors} colors`) +
-    statChip('✨', `${sparkles} sparkles`) +
-    statChip('🎀', `${charms} charms`) +
+    statChip('🎨', `${stats.colors} colors`) +
+    statChip('✨', `${stats.sparkles} sparkles`) +
+    statChip('🎀', `${stats.charms} charms`) +
     (prof.created_at ? statChip('📅', `since ${memberSince(prof.created_at)}`) : '') +
     `</div>` +
+    badgesHtml(stats) +
+    `<div class="me-play-row">` +
     `<a href="/chat" class="btn btn-primary me-play-btn">💬 open chat</a>` +
-    `<a href="/slimemaker" class="btn btn-primary me-play-btn">🧪 make more slime →</a>`;
-  $('signout-btn').addEventListener('click', async () => {
-    await logOut();
-    await refresh();
-  });
+    `<a href="/slimemaker" class="btn btn-primary me-play-btn">🧪 make more slime →</a>` +
+    `</div>`;
+  $('signout-btn').addEventListener('click', signOutAndRefresh);
 }
 
 function renderPlayersGrid(players) {
   const grid = $('players-grid');
   if (!players.length) {
-    grid.innerHTML = `<p class="players-empty">no players yet — be the first! 🫧</p>`;
+    grid.innerHTML = emptyState('🫧', 'no players yet — be the first!', 'make a slime and your friends will show up here');
     return;
   }
   grid.innerHTML = players
@@ -216,6 +263,30 @@ function renderPlayersGrid(players) {
   });
 }
 
+// "What's New ✨" — the 5 most-recently-made slimes across all friends.
+function renderWhatsNew(players) {
+  const box = $('whats-new');
+  if (!box) return;
+  const recent = players
+    .flatMap((p) => p.slimes.map((s) => ({ ...s, username: p.username })))
+    .sort((a, b) => (b.created_at > a.created_at ? 1 : -1))
+    .slice(0, 5);
+  if (!recent.length) { box.innerHTML = ''; return; }
+  box.innerHTML =
+    `<h3 class="whats-new-title">what's new ✨</h3>` +
+    `<div class="whats-new-row">` +
+    recent
+      .map(
+        (s) =>
+          `<div class="whats-new-item">` +
+          slimeBlob(s.color, s.sparkle, s.charm, 40) +
+          `<span class="whats-new-text"><b>${esc(s.username)}</b> made a new slime!</span>` +
+          `</div>`
+      )
+      .join('') +
+    `</div>`;
+}
+
 function openPlayerModal(p) {
   const slimes = p.slimes
     .map(
@@ -226,17 +297,20 @@ function openPlayerModal(p) {
         `</div>`
     )
     .join('');
+  const stats = statsOf(p, p.slimes.length);
   $('player-modal-body').innerHTML =
     `<h3 class="modal-username">${esc(p.username)}</h3>` +
     `<div class="stat-chips modal-chips">` +
-    statChip('🪙', `${p.coins ?? 0} coins`) +
+    statChip('🪙', `${stats.coins} coins`) +
     statChip('🫧', `${p.slimes.length} slimes`) +
+    statChip('🎨', `${stats.colors} colors`) +
     (p.created_at ? statChip('📅', `since ${memberSince(p.created_at)}`) : '') +
     `</div>` +
+    badgesHtml(stats) +
     `<h4 class="modal-collection-title">slime collection 🌈</h4>` +
     (p.slimes.length
       ? `<div class="modal-slimes">${slimes}</div>`
-      : `<p class="players-empty">no slimes yet!</p>`);
+      : emptyState('🫧', 'no slimes yet!', 'tap “make more slime” to start a collection'));
   const modal = $('player-modal');
   modal.classList.add('open');
   modal.setAttribute('aria-hidden', 'false');
@@ -274,6 +348,13 @@ async function loadEveryone(myId) {
 function setAdminNav(isAdmin) {
   const item = document.getElementById('nav-admin-item');
   if (item) item.hidden = !isAdmin;
+  const footer = document.getElementById('footer-edit');
+  if (footer) footer.hidden = !isAdmin;
+}
+
+async function signOutAndRefresh() {
+  await logOut();
+  await refresh();
 }
 
 function setAuthNav(prof) {
@@ -308,6 +389,7 @@ async function showSignedIn(prof) {
   const players = await loadEveryone(prof.id);
   const me = players.find((p) => p.id === prof.id) || { ...prof, slimes: [] };
   renderMeCard(prof, me.slimes.length);
+  renderWhatsNew(players);
   renderPlayersGrid(players);
 }
 
@@ -333,18 +415,25 @@ function setAuthMode(mode) {
   $('login-error').hidden = true;
 }
 
+// Show a login error, optionally with a one-tap "make a new account" button
+// that flips the form to sign-up (carrying the name they already typed).
+function showLoginError(msg, offerSignup) {
+  const errEl = $('login-error');
+  errEl.innerHTML =
+    `<span>${esc(msg)}</span>` +
+    (offerSignup ? ` <button type="button" class="login-error-action" id="login-go-signup">make a new account →</button>` : '');
+  errEl.hidden = false;
+  const go = document.getElementById('login-go-signup');
+  if (go) go.addEventListener('click', () => { setAuthMode('signup'); $('login-code').focus(); });
+}
+
 function wire() {
   document.querySelectorAll('.auth-tab').forEach((tab) =>
     tab.addEventListener('click', () => setAuthMode(tab.getAttribute('data-mode')))
   );
 
   const navOut = document.getElementById('nav-signout-btn');
-  if (navOut) {
-    navOut.addEventListener('click', async () => {
-      await logOut();
-      showSignedOut();
-    });
-  }
+  if (navOut) navOut.addEventListener('click', signOutAndRefresh);
 
   const form = $('login-form');
   if (form) {
@@ -370,8 +459,11 @@ function wire() {
         $('login-code2').value = '';
         await showSignedIn(prof);
       } catch (err) {
-        errEl.textContent = err.message || 'Hmm, that didn’t work.';
-        errEl.hidden = false;
+        showLoginError(err.message || 'Hmm, that didn’t work.', !!err.offerSignup);
+        // Keep the name, clear just the code so a mistyped code is one quick retry.
+        $('login-code').value = '';
+        $('login-code2').value = '';
+        $('login-code').focus();
       } finally {
         btn.disabled = false;
         btn.textContent = orig;

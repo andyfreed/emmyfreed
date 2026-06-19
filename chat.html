@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<meta name="robots" content="noindex, nofollow, noimageindex, noarchive" />
 <title>Chat ✨ emmy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -67,6 +68,16 @@
   .messages{flex:1; overflow-y:auto; overflow-x:hidden; padding:16px 14px 8px; -webkit-overflow-scrolling:touch}
   .empty{text-align:center; color:var(--ink-soft); font-weight:800; margin-top:30%; font-size:1.05rem}
 
+  .empty-room{max-width:340px; margin:12% auto 0; text-align:center; background:#fff; border:3px dashed var(--ink);
+    border-radius:var(--radius); padding:26px 20px}
+  .empty-room-emoji{font-size:46px; line-height:1; display:inline-block; animation:coachBob 2s ease-in-out infinite}
+  .empty-room-title{font-family:'Lilita One',cursive; font-size:1.3rem; margin:10px 0 2px}
+  .empty-room-sub{color:var(--ink-soft); font-weight:700; font-size:.92rem; margin:0 0 14px}
+  .empty-room-prompts{display:flex; flex-direction:column; gap:9px}
+  .prompt-chip{font-family:'Nunito',sans-serif; font-weight:800; font-size:.98rem; color:var(--ink); background:var(--yellow-soft);
+    border:2.5px solid var(--ink); border-radius:999px; padding:9px 14px; cursor:pointer; box-shadow:3px 3px 0 var(--ink)}
+  .prompt-chip:active{transform:translate(2px,2px); box-shadow:1px 1px 0 var(--ink)}
+
   .group{display:flex; gap:9px; margin-bottom:14px; align-items:flex-end}
   .group.me{flex-direction:row-reverse}
   .avatar{flex:none; width:38px; height:38px; border-radius:50%; border:2.5px solid var(--ink);
@@ -120,6 +131,16 @@
   .new-pill{position:absolute; left:50%; transform:translateX(-50%); bottom:84px; z-index:7;
     background:var(--pink); color:#fff; font-family:'Lilita One'; border:2.5px solid var(--ink); border-radius:999px;
     padding:6px 16px; box-shadow:var(--pop); cursor:pointer; font-size:.9rem}
+
+  .coach-hint{position:absolute; left:50%; transform:translateX(-50%); bottom:84px; z-index:7;
+    background:var(--lav-soft); color:var(--ink); font-weight:800; border:2.5px solid var(--ink); border-radius:999px;
+    padding:7px 16px; box-shadow:var(--pop); font-size:.85rem; animation:coachBob 1.6s ease-in-out infinite}
+  @keyframes coachBob{0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(-4px)}}
+
+  /* delete confirm popover */
+  .msg-menu.confirm-del{align-items:center; gap:6px}
+  .msg-menu .confirm-q{font-weight:800; font-size:.85rem; color:var(--ink-soft); padding:0 2px}
+  .msg-menu .txt.yes{color:var(--pink)}
 
   /* composer */
   .composer{flex:none; border-top:3px solid var(--ink); background:rgba(255,248,231,0.97); backdrop-filter:blur(6px);
@@ -181,6 +202,7 @@
     <div class="messages" id="messages"></div>
     <div class="typing" id="typing"></div>
     <button class="new-pill hidden" id="new-pill">↓ new messages</button>
+    <div class="coach-hint hidden" id="coach-hint">👆 tap a message to react with an emoji!</div>
     <div class="composer">
       <button class="emoji-btn" id="emoji-btn" aria-label="Emojis" type="button">😀</button>
       <textarea id="msg-input" rows="1" placeholder="say something nice…" maxlength="2000"></textarea>

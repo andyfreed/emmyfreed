@@ -42,6 +42,7 @@ let firstLoad = true;
 let justSent = false;
 let activeMenuId = null;
 let editingId = null;
+let confirmingDeleteId = null;
 let lastTypingSent = 0;
 
 const messagesById = new Map();    // id -> message row (or optimistic temp)
@@ -106,12 +107,27 @@ async function loadHistory(){
   reactionsById.clear();
   (rx || []).forEach((r) => reactionsById.set(r.id, r));
   render();
-  if (firstLoad) { scrollToBottom(); firstLoad = false; }
+  if (firstLoad) { scrollToBottom(); firstLoad = false; maybeShowCoach(); }
 }
 
 /* ---------------- rendering ---------------- */
 function isNearBottom(){ const b = $('messages'); return b.scrollHeight - b.scrollTop - b.clientHeight < 90; }
 function scrollToBottom(){ const b = $('messages'); b.scrollTop = b.scrollHeight; $('new-pill').classList.add('hidden'); }
+
+/* one-time "tap a message to react" coach hint */
+let coachTimer = null;
+function maybeShowCoach(){
+  try { if (localStorage.getItem('chat_coach_seen')) return; } catch { return; }
+  if (!messagesById.size) return; // need a message to tap
+  const el = $('coach-hint'); if (!el) return;
+  el.classList.remove('hidden');
+  coachTimer = setTimeout(dismissCoach, 9000);
+}
+function dismissCoach(){
+  const el = $('coach-hint'); if (el) el.classList.add('hidden');
+  if (coachTimer) { clearTimeout(coachTimer); coachTimer = null; }
+  try { localStorage.setItem('chat_coach_seen', '1'); } catch { /* ignore */ }
+}
 
 function reactsHtml(msgId){
   const agg = new Map(); // emoji -> { count, mine }
@@ -133,6 +149,11 @@ function menuHtml(m){
   else if (me.is_admin) b += `<button class="txt" data-act="del" data-id="${esc(m.id)}">delete</button>`;
   return `<div class="msg-menu">${b}</div>`;
 }
+function delConfirmHtml(m){
+  return `<div class="msg-menu confirm-del"><span class="confirm-q">delete?</span>` +
+    `<button class="txt yes" data-act="del-yes" data-id="${esc(m.id)}">yes</button>` +
+    `<button class="txt" data-act="del-no">no</button></div>`;
+}
 function msgHtml(m){
   let inner;
   if (m.deleted) {
@@ -146,7 +167,9 @@ function msgHtml(m){
     const tag = m.edited_at ? '<span class="edited-tag">(edited)</span>' : '';
     inner = `<span class="${cls}" data-id="${esc(m.id)}" data-bubble>${esc(m.body)}${tag}</span>`;
   }
-  const menu = (activeMenuId === m.id && !m.deleted && !m.pending && editingId !== m.id) ? menuHtml(m) : '';
+  let menu = '';
+  if (confirmingDeleteId === m.id && !m.deleted) menu = delConfirmHtml(m);
+  else if (activeMenuId === m.id && !m.deleted && !m.pending && editingId !== m.id) menu = menuHtml(m);
   return `<div class="msg">${menu}${inner}${m.deleted ? '' : reactsHtml(m.id)}</div>`;
 }
 function render(){
@@ -154,7 +177,18 @@ function render(){
   const atBottom = isNearBottom();
   const keepTop = box.scrollTop;
   const msgs = [...messagesById.values()].sort(byTime);
-  if (!msgs.length) { box.innerHTML = `<div class="empty">no messages yet — say hi! 👋</div>`; return; }
+  if (!msgs.length) {
+    const prompts = ['say hi 👋', 'tell a joke 😂', "what's your fave slime? 🫧"];
+    box.innerHTML =
+      `<div class="empty-room">` +
+      `<div class="empty-room-emoji">💬</div>` +
+      `<p class="empty-room-title">it's quiet in here…</p>` +
+      `<p class="empty-room-sub">be the first to say something! tap one:</p>` +
+      `<div class="empty-room-prompts">` +
+      prompts.map((p) => `<button type="button" class="prompt-chip" data-prompt="${esc(p)}">${esc(p)}</button>`).join('') +
+      `</div></div>`;
+    return;
+  }
 
   let html = '', prev = null, openGroup = false;
   for (const m of msgs) {
@@ -224,8 +258,14 @@ async function toggleReaction(msgId, emoji){
     reactionsById.delete(mineId); render();
     await sb.from('message_reactions').delete().eq('id', mineId);
   } else {
-    const { data } = await sb.from('message_reactions').insert({ message_id: msgId, user_id: me.id, emoji }).select().single();
-    if (data) { reactionsById.set(data.id, data); render(); }
+    // Optimistic add: show it instantly, then swap the temp row for the real one.
+    const tempId = 'temp-rx-' + Math.random().toString(36).slice(2);
+    reactionsById.set(tempId, { id: tempId, message_id: msgId, user_id: me.id, emoji });
+    render();
+    const { data, error } = await sb.from('message_reactions').insert({ message_id: msgId, user_id: me.id, emoji }).select().single();
+    reactionsById.delete(tempId);
+    if (data && !error) reactionsById.set(data.id, data);
+    render();
   }
 }
 
@@ -240,8 +280,8 @@ async function saveEdit(msgId){
   } else { render(); }
 }
 async function doDelete(msgId){
+  confirmingDeleteId = null;
   activeMenuId = null;
-  if (!window.confirm('Delete this message?')) return;
   const m = messagesById.get(msgId);
   if (m) { m.deleted = true; render(); }
   await sb.from('messages').update({ deleted: true, body: '' }).eq('id', msgId);
@@ -339,6 +379,13 @@ function wireComposer(){
 
   // delegated clicks on the message list
   $('messages').addEventListener('click', (e) => {
+    const prompt = e.target.closest('[data-prompt]');
+    if (prompt) {
+      const input = $('msg-input');
+      input.value = prompt.getAttribute('data-prompt');
+      input.focus(); autoGrow(); updateSendBtn();
+      return;
+    }
     const chip = e.target.closest('[data-react]');
     if (chip) { toggleReaction(chip.getAttribute('data-react'), chip.getAttribute('data-emoji')); return; }
     const act = e.target.closest('[data-act]');
@@ -347,7 +394,9 @@ function wireComposer(){
       const mid = act.getAttribute('data-id');
       if (kind === 'react') { toggleReaction(mid, act.getAttribute('data-emoji')); activeMenuId = null; render(); }
       else if (kind === 'edit') { editingId = mid; activeMenuId = null; render(); const ta = $('edit-input'); if (ta) ta.focus(); }
-      else if (kind === 'del') { doDelete(mid); }
+      else if (kind === 'del') { activeMenuId = null; confirmingDeleteId = mid; render(); }
+      else if (kind === 'del-yes') { doDelete(mid); }
+      else if (kind === 'del-no') { confirmingDeleteId = null; render(); }
       else if (kind === 'save') { saveEdit(mid); }
       else if (kind === 'cancel') { editingId = null; render(); }
       return;
@@ -357,10 +406,13 @@ function wireComposer(){
       const mid = bubble.getAttribute('data-id');
       const m = messagesById.get(mid);
       if (m && m.failed) { retry(mid); return; }
-      activeMenuId = (activeMenuId === mid) ? null : mid; render();
+      confirmingDeleteId = null;
+      activeMenuId = (activeMenuId === mid) ? null : mid;
+      dismissCoach();
+      render();
       return;
     }
-    if (activeMenuId) { activeMenuId = null; render(); }
+    if (activeMenuId || confirmingDeleteId) { activeMenuId = null; confirmingDeleteId = null; render(); }
   });
 }
 

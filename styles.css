@@ -113,7 +113,7 @@ body {
 .nav-toggle.open span:nth-child(2) { opacity: 0; }
 .nav-toggle.open span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
 
-@media (max-width: 760px) {
+@media (max-width: 1000px) {
   .nav { padding: 12px 18px; }
   .nav-toggle { display: flex; }
   .nav-links {
@@ -126,6 +126,16 @@ body {
   }
   .nav-links.open { transform: translateY(0); }
   .nav-links a { padding: 12px 16px; font-size: 18px; }
+  .nav-links .nav-auth-btn { width: 100%; text-align: center; margin-top: 4px; }
+}
+
+/* ============ FOCUS RINGS (keyboard / Chromebook users) ============ */
+:focus-visible { outline: 3px solid var(--pink); outline-offset: 3px; }
+.btn:focus-visible, .nav-links a:focus-visible, .nav-auth-btn:focus-visible,
+.nav-toggle:focus-visible, .auth-tab:focus-visible, .player-tile:focus-visible,
+.signout-btn:focus-visible, .player-modal-close:focus-visible, .lightbox-close:focus-visible,
+.heart-btn:focus-visible, .login-error-action:focus-visible {
+  outline: 3px solid var(--ink); outline-offset: 3px; border-radius: 8px;
 }
 
 /* ============ PAGES ============ */
@@ -710,6 +720,12 @@ body {
   margin: 0; padding: 10px 12px; font-weight: 800; font-size: 14px;
   background: var(--pink-soft); border: 2.5px solid var(--ink); border-radius: 12px;
 }
+.login-error-action {
+  display: inline-block; margin-top: 8px; font-family: 'Nunito', sans-serif; font-weight: 800;
+  font-size: 13px; color: var(--ink); background: #fff; border: 2.5px solid var(--ink);
+  border-radius: 999px; padding: 5px 12px; cursor: pointer; box-shadow: var(--shadow-pop-sm);
+}
+.login-error-action:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
 .login-form .btn { margin-top: 4px; }
 
 /* Your stats card */
@@ -731,7 +747,6 @@ body {
   background: #fff; border: 2.5px solid var(--ink); border-radius: 999px;
   padding: 6px 13px; font-weight: 800; font-size: 14px; white-space: nowrap;
 }
-.me-play-btn { width: auto; display: inline-block; margin-top: 18px; margin-right: 10px; padding: 12px 22px; font-size: 17px; }
 
 /* Friends grid */
 .players-friends-title { font-family: 'Lilita One', sans-serif; font-size: 24px; text-align: center; margin: 0 0 22px; }
@@ -783,3 +798,46 @@ body {
 .modal-slimes { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 14px; }
 .modal-slime { display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .modal-slime-name { font-weight: 800; font-size: 13px; text-align: center; word-break: break-word; }
+
+/* ============ ACHIEVEMENT BADGES ============ */
+.badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 0; }
+.badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: #fff; border: 2.5px solid var(--ink); border-radius: 999px;
+  padding: 5px 12px 5px 9px; box-shadow: var(--shadow-pop-sm);
+}
+.badge-emoji { font-size: 18px; line-height: 1; }
+.badge-label { font-family: 'Lilita One', sans-serif; font-size: 13px; letter-spacing: .2px; }
+.modal-chips + .badges { margin-bottom: 20px; }
+
+/* ============ ME-CARD PLAY BUTTONS ============ */
+.me-play-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; }
+.me-play-btn { width: auto; display: inline-block; margin: 0; padding: 12px 22px; font-size: 17px; }
+@media (max-width: 460px) { .me-play-btn { flex: 1 1 100%; text-align: center; } }
+
+/* ============ BOUNCY EMPTY STATES ============ */
+.empty-card {
+  grid-column: 1 / -1; text-align: center; padding: 28px 20px; margin: 0 auto; max-width: 360px;
+  background: #fff; border: 3px dashed var(--ink); border-radius: var(--radius);
+}
+.empty-emoji { display: inline-block; font-size: 46px; line-height: 1; animation: emptyBob 2s ease-in-out infinite; }
+@keyframes emptyBob { 0%,100%{ transform: translateY(0) rotate(-4deg); } 50%{ transform: translateY(-8px) rotate(4deg); } }
+.empty-title { font-family: 'Lilita One', sans-serif; font-size: 20px; margin: 10px 0 2px; }
+.empty-sub { color: var(--ink-soft); font-weight: 700; font-size: 14px; margin: 0; }
+
+/* ============ WHAT'S NEW STRIP ============ */
+.whats-new { max-width: 640px; margin: 0 auto 34px; }
+.whats-new:empty { display: none; }
+.whats-new-title { font-family: 'Lilita One', sans-serif; font-size: 20px; text-align: center; margin: 0 0 12px; }
+.whats-new-row { display: flex; flex-direction: column; gap: 8px; }
+.whats-new-item {
+  display: flex; align-items: center; gap: 12px;
+  background: #fff; border: 2.5px solid var(--ink); border-radius: 14px;
+  box-shadow: var(--shadow-pop-sm); padding: 8px 14px;
+}
+.whats-new-text { font-weight: 700; font-size: 15px; }
+.whats-new-text b { font-family: 'Lilita One', sans-serif; font-weight: 400; }
+
+@media (prefers-reduced-motion: reduce) {
+  .empty-emoji { animation: none !important; }
+}

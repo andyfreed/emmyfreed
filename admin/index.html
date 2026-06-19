@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex, nofollow, noimageindex, noarchive" />
 <title>Edit my website ✨</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -96,6 +97,8 @@
   .status{margin:0 0 1rem; padding:.8rem 1rem; border-radius:14px; font-weight:800; border:3px solid var(--ink); box-shadow:var(--pop)}
   .status.ok{background:var(--mint)}
   .status.err{background:var(--pink-soft)}
+  .status .see-live{display:inline-block; margin-left:8px; font-weight:800; color:var(--ink); text-decoration:underline}
+  :focus-visible{outline:3px solid var(--ink); outline-offset:3px; border-radius:8px}
   .loading{text-align:center; color:var(--ink-soft); font-weight:800; padding:3rem 0; font-size:1.1rem}
 </style>
 </head>
@@ -365,7 +368,9 @@ async function save(){
   try {
     const { error } = await sb.from('site_content').update({ data: content, updated_at: new Date().toISOString() }).eq('id','main');
     if (error) throw error;
-    status('Saved! 🎉 Your website updated — refresh it to see.', true);
+    const el = $('status');
+    el.className = 'status ok';
+    el.innerHTML = 'Saved! 🎉 Your website updated. <a href="/" target="_blank" rel="noopener" class="see-live">See it live ↗</a>';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } catch (err) {
     status("Hmm, saving didn't work (" + (err.message || err) + ').', false);

@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow, noimageindex, noarchive" />
 <title>Emmy is Awesome ✨</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -222,8 +223,8 @@
     <p class="section-dek" data-cms="players.dek">log in to see your slime stats and your friends!</p>
   </div>
 
-  <!-- Logged out: same login as the slime game -->
-  <div id="players-signin" class="players-card reveal" hidden>
+  <!-- Logged out: same login as the slime game (shown by default; hidden once a session resolves) -->
+  <div id="players-signin" class="players-card reveal">
     <div class="auth-tabs">
       <button type="button" class="auth-tab active" data-mode="login">Log in</button>
       <button type="button" class="auth-tab" data-mode="signup">Create account</button>
@@ -252,6 +253,7 @@
   <!-- Logged in: your stats + everyone's profiles -->
   <div id="players-app" hidden>
     <div id="me-card" class="me-card reveal"></div>
+    <div id="whats-new" class="whats-new"></div>
     <h3 class="players-friends-title">everyone's slimes 🌈</h3>
     <div id="players-grid" class="players-grid"></div>
   </div>
@@ -310,7 +312,7 @@
   <div class="footer-inner">
     <p class="footer-sig">made with <span class="heart">💖</span> by <strong>emmy</strong></p>
     <p class="footer-year" data-cms="footer.year">© 2026 • emmy is awesome dot com</p>
-    <a class="footer-edit" href="/admin">✏️ edit my site</a>
+    <a class="footer-edit" id="footer-edit" href="/admin" hidden>✏️ edit my site</a>
   </div>
 </footer>
 
