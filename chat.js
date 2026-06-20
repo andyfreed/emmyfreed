@@ -73,25 +73,20 @@ async function ensureProfile(username){
   if (!prof) { await sb.from('profiles').insert({ id: ud.user.id, username }); prof = await fetchProfile(ud.user.id); }
   return prof;
 }
-// Strict log in — never creates an account by accident.
-async function logIn(rawName, code){
-  const { username, email, password } = validateCreds(rawName, code);
-  const { error } = await sb.auth.signInWithPassword({ email, password });
-  if (error) throw new Error("That name and code don't match. New here? Tap “Create account.”");
-  return ensureProfile(username);
-}
-// Explicit account creation (also works in the slime game — same login).
-async function createAccount(rawName, code){
+// One-step sign in: log in if the account exists, otherwise create it. Same
+// name + code as the slime game, entered just once.
+async function signInOrCreate(rawName, code){
   const { username, email, password } = validateCreds(rawName, code);
   const signin = await sb.auth.signInWithPassword({ email, password });
   if (!signin.error) return ensureProfile(username);
   const { error: upErr } = await sb.auth.signUp({ email, password, options: { data: { username } } });
   if (upErr) {
-    if (/already|registered|exists/i.test(upErr.message)) throw new Error('That name is already taken. Pick a different one (or log in if it’s yours).');
-    throw new Error(upErr.message || 'Could not create your account.');
+    // Name exists but the code didn't match the existing account.
+    if (/already|registered|exists/i.test(upErr.message)) throw new Error("That didn't work — check your name and code, then try again.");
+    throw new Error(upErr.message || 'Could not log you in.');
   }
   const { error: e2 } = await sb.auth.signInWithPassword({ email, password });
-  if (e2) throw new Error('Account made, but sign-in failed. Try logging in.');
+  if (e2) throw new Error('Account made, but sign-in failed. Try again.');
   return ensureProfile(username);
 }
 async function fetchProfile(id){
@@ -416,30 +411,15 @@ function wireComposer(){
   });
 }
 
-// login / create-account form
-let authMode = 'login';
-function setAuthMode(mode){
-  authMode = mode;
-  document.querySelectorAll('.auth-tab').forEach((t) => t.classList.toggle('active', t.getAttribute('data-mode') === mode));
-  const signup = mode === 'signup';
-  $('confirm-wrap').hidden = !signup;
-  $('login-btn').textContent = signup ? 'create my account →' : "let's chat! →";
-  $('auth-sub').textContent = signup ? 'pick a name and a secret 4-number code' : 'log in with your name & code to chat!';
-  $('login-error').classList.add('hidden');
-}
-document.querySelectorAll('.auth-tab').forEach((tab) =>
-  tab.addEventListener('click', () => setAuthMode(tab.getAttribute('data-mode')))
-);
+// login form — one name + one code, entered once. Logs you in if the account
+// exists, or creates it if you're new (same flow as the slime game).
 $('login-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const err = $('login-error'); err.classList.add('hidden');
   const name = $('login-username').value, code = $('login-code').value;
-  if (authMode === 'signup' && $('login-code2').value.trim() !== code.trim()) {
-    err.textContent = 'Your two codes are different — type the same 4 numbers twice.'; err.classList.remove('hidden'); return;
-  }
   const btn = $('login-btn'); btn.disabled = true; const orig = btn.textContent; btn.textContent = 'one sec…';
   try {
-    const prof = authMode === 'signup' ? await createAccount(name, code) : await logIn(name, code);
+    const prof = await signInOrCreate(name, code);
     await startChat(prof);
   }
   catch (e2) { err.textContent = e2.message || 'Login failed.'; err.classList.remove('hidden'); }

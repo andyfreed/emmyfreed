@@ -42,15 +42,9 @@
   .login-form input{font-family:'Nunito',sans-serif; font-size:1.1rem; font-weight:700; color:var(--ink);
     border:2.5px solid var(--ink); border-radius:12px; padding:.6em .7em; background:var(--paper)}
   .login-form input:focus{outline:none; border-color:var(--pink); box-shadow:0 0 0 3px var(--pink-soft)}
-  #login-code, #login-code2{letter-spacing:8px; text-align:center; font-size:1.3rem}
+  #login-code{letter-spacing:8px; text-align:center; font-size:1.3rem}
   .login-error{margin:0; padding:.7rem; font-weight:800; font-size:.9rem; background:var(--pink-soft);
     border:2.5px solid var(--ink); border-radius:12px}
-  .auth-tabs{display:flex; gap:8px; margin:0 0 14px}
-  .auth-tab{flex:1; font-family:'Lilita One',cursive; font-size:.95rem; letter-spacing:.3px; padding:9px 6px;
-    border:2.5px solid var(--ink); border-radius:12px; background:#fff; color:var(--ink-soft); cursor:pointer;
-    box-shadow:3px 3px 0 var(--ink); transition:transform .08s, box-shadow .08s}
-  .auth-tab.active{background:var(--yellow); color:var(--ink)}
-  .auth-tab:active{transform:translate(2px,2px); box-shadow:1px 1px 0 var(--ink)}
   .login-back{display:inline-block; margin-top:1rem; font-weight:800; color:var(--ink-soft); text-decoration:underline; font-size:.9rem}
 
   /* ---------- CHAT LAYOUT ---------- */
@@ -170,20 +164,13 @@
   <section id="view-login">
     <div class="login-card">
       <h1>💬 friends chat</h1>
-      <div class="auth-tabs">
-        <button type="button" class="auth-tab active" data-mode="login">Log in</button>
-        <button type="button" class="auth-tab" data-mode="signup">Create account</button>
-      </div>
-      <p id="auth-sub">log in with your name &amp; code to chat!</p>
+      <p id="auth-sub">type your name &amp; secret code — we'll make you an account if you're new!</p>
       <form id="login-form" class="login-form" autocomplete="off">
         <label>your name
           <input id="login-username" type="text" maxlength="20" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="your name" />
         </label>
         <label>secret 4-number code
           <input id="login-code" type="text" inputmode="numeric" pattern="\d*" maxlength="4" placeholder="••••" />
-        </label>
-        <label id="confirm-wrap" hidden>type your code again
-          <input id="login-code2" type="text" inputmode="numeric" pattern="\d*" maxlength="4" placeholder="••••" />
         </label>
         <p id="login-error" class="login-error hidden"></p>
         <button type="submit" class="btn btn-pink" id="login-btn">let's chat! →</button>
