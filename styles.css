@@ -631,6 +631,72 @@ body {
   font-weight: 500;
 }
 
+/* ============ CHAT FEATURE (mirrors the Slime Maker CTA) ============ */
+.chat-cta {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 50px;
+  align-items: center;
+  max-width: 900px;
+  margin: 0 auto;
+  background: #fff;
+  border: 3px solid var(--ink);
+  border-radius: var(--radius);
+  padding: 40px;
+  box-shadow: var(--shadow-pop);
+  position: relative;
+}
+.chat-cta::before {
+  content: '💬';
+  position: absolute;
+  top: -22px; left: 30px;
+  font-size: 40px;
+  animation: wobble 3s ease-in-out infinite;
+}
+@media (max-width: 760px) {
+  .chat-cta { grid-template-columns: 1fr; gap: 24px; padding: 28px; text-align: center; }
+}
+.chat-cta-art {
+  width: 230px;
+  filter: drop-shadow(6px 6px 0 rgba(26, 26, 46, 0.9));
+}
+.chat-cta-art svg { width: 100%; height: auto; }
+@media (max-width: 760px) {
+  .chat-cta-art { width: 200px; margin: 0 auto; grid-row: 1; }
+}
+.chat-cta-copy { display: flex; flex-direction: column; gap: 14px; }
+.chat-cta-kicker {
+  font-family: 'Caveat', cursive;
+  font-size: 24px;
+  color: var(--lav);
+  margin: 0;
+  font-weight: 700;
+  transform: rotate(-2deg);
+  align-self: flex-start;
+}
+@media (max-width: 760px) { .chat-cta-kicker { align-self: center; } }
+.chat-cta-title {
+  font-family: 'Lilita One', sans-serif;
+  font-size: clamp(28px, 4vw, 40px);
+  line-height: 1.05;
+  margin: 0;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+.chat-cta-text {
+  font-size: 17px;
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+.chat-cta-btn { align-self: flex-start; width: auto; margin-top: 6px; }
+@media (max-width: 760px) { .chat-cta-btn { align-self: center; } }
+
+/* Lavender accent button used for chat CTAs. */
+.btn-chat { background: var(--lav); color: #fff; }
+.btn-chat:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--ink); }
+.btn-chat:active { transform: translate(3px, 3px); box-shadow: 2px 2px 0 var(--ink); }
+
 /* ============ FOOTER ============ */
 .footer {
   background: var(--ink);

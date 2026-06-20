@@ -77,6 +77,7 @@
 
     <div class="home-ctas">
       <a href="/slimemaker" class="btn btn-primary" data-cms="home.ctaPrimary">make some slime →</a>
+      <a href="/chat" class="btn btn-chat" data-cms="home.ctaChat">💬 friends chat</a>
       <a href="#about" class="btn btn-ghost" data-cms="home.ctaGhost">meet emmy</a>
     </div>
 
@@ -262,7 +263,48 @@
   </div>
 </section>
 
-<section id="slime" class="page page-slime" data-screen-label="05 Slime Maker">
+<!-- ============================================= CHAT ============================================= -->
+<section id="chat" class="page page-chat" data-screen-label="05 Chat">
+  <div class="section-head reveal">
+    <span class="tape tape-lav"></span>
+    <h2 class="section-title" data-cms="chat.title">Friends Chat 💬</h2>
+    <p class="section-dek" data-cms="chat.dek">talk to your friends right here!</p>
+  </div>
+
+  <div class="chat-cta reveal">
+    <div class="chat-cta-copy">
+      <p class="chat-cta-kicker" data-cms="chat.ctaKicker">💬 say hi to your friends</p>
+      <h3 class="chat-cta-title" data-cms="chat.ctaTitle">there's a friends chat too!</h3>
+      <p class="chat-cta-text" data-cms="chat.ctaText">log in with the same name and secret code you use for the game, then send messages to your friends and react with emojis. be kind and say something nice! 💕</p>
+      <a href="/chat" class="btn btn-chat btn-big chat-cta-btn" data-cms="chat.ctaBtn">💬 open the chat →</a>
+    </div>
+
+    <!-- Decorative speech bubbles -->
+    <div class="chat-cta-art" aria-hidden="true">
+      <svg viewBox="0 0 280 300" preserveAspectRatio="xMidYMid meet">
+        <!-- big lavender bubble with typing dots -->
+        <path d="M40 40 Q40 24 56 24 L214 24 Q230 24 230 40 L230 150 Q230 166 214 166 L100 166 L62 202 L72 166 L56 166 Q40 166 40 150 Z"
+              fill="#E7C6FF" stroke="#1a1a2e" stroke-width="5" stroke-linejoin="round"/>
+        <circle cx="98" cy="95" r="11" fill="#fff" stroke="#1a1a2e" stroke-width="4"/>
+        <circle cx="135" cy="95" r="11" fill="#fff" stroke="#1a1a2e" stroke-width="4"/>
+        <circle cx="172" cy="95" r="11" fill="#fff" stroke="#1a1a2e" stroke-width="4"/>
+        <!-- small pink bubble with a heart -->
+        <path d="M150 176 Q150 164 162 164 L246 164 Q258 164 258 176 L258 236 Q258 248 246 248 L214 248 L204 272 L200 248 L162 248 Q150 248 150 236 Z"
+              fill="#FF3D7F" stroke="#1a1a2e" stroke-width="5" stroke-linejoin="round"/>
+        <g transform="translate(180,186) scale(0.5)">
+          <path d="M50 85 C 10 60 10 25 30 25 C 42 25 50 35 50 35 C 50 35 58 25 70 25 C 90 25 90 60 50 85 Z"
+                fill="#fff" stroke="#1a1a2e" stroke-width="7" stroke-linejoin="round"/>
+        </g>
+        <!-- yellow star accent -->
+        <path d="M52 214 L57 230 L74 230 L60 240 L65 257 L52 247 L39 257 L44 240 L30 230 L47 230 Z"
+              fill="#FFD23F" stroke="#1a1a2e" stroke-width="4" stroke-linejoin="round"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================= SLIME MAKER ============================================= -->
+<section id="slime" class="page page-slime" data-screen-label="06 Slime Maker">
   <div class="section-head reveal">
     <span class="tape tape-yellow"></span>
     <h2 class="section-title" data-cms="slime.title">Slime Maker ✨</h2>
