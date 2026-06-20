@@ -113,29 +113,21 @@ async function ensureProfile(username) {
   return prof;
 }
 
-// Strict log in — never creates an account by accident.
-async function logIn(rawName, code) {
+// One-step sign in: log in if the account exists, otherwise create it. Same
+// name + code as the slime game, entered just once.
+async function signInOrCreate(rawName, code) {
   const { username, email, password } = validateCreds(rawName, code);
-  const { error } = await sb.auth.signInWithPassword({ email, password });
-  if (error) { const e = new Error("That name and code don't match."); e.offerSignup = true; throw e; }
-  return ensureProfile(username);
-}
-
-// Explicit account creation (also works in the slime game — same login).
-async function createAccount(rawName, code) {
-  const { username, email, password } = validateCreds(rawName, code);
-  // If it already exists with this exact code, just log them in.
   const signin = await sb.auth.signInWithPassword({ email, password });
   if (!signin.error) return ensureProfile(username);
-  // Otherwise try to create it.
   const { error: upErr } = await sb.auth.signUp({ email, password, options: { data: { username } } });
   if (upErr) {
+    // Name exists but the code didn't match the existing account.
     if (/already|registered|exists/i.test(upErr.message))
-      throw new Error('That name is already taken. Pick a different one (or log in if it’s yours).');
-    throw new Error(upErr.message || 'Could not create your account.');
+      throw new Error("That didn't work — check your name and code, then try again.");
+    throw new Error(upErr.message || 'Could not log you in.');
   }
   const { error: e2 } = await sb.auth.signInWithPassword({ email, password });
-  if (e2) throw new Error('Account made, but sign-in failed. Try logging in.');
+  if (e2) throw new Error('Account made, but sign-in failed. Try again.');
   return ensureProfile(username);
 }
 
@@ -609,36 +601,13 @@ async function refresh() {
 }
 
 /* ================================ WIRING ================================ */
-let authMode = 'login'; // 'login' | 'signup'
-
-function setAuthMode(mode) {
-  authMode = mode;
-  document.querySelectorAll('.auth-tab').forEach((t) => t.classList.toggle('active', t.getAttribute('data-mode') === mode));
-  const signup = mode === 'signup';
-  $('confirm-wrap').hidden = !signup;
-  $('login-btn').textContent = signup ? 'create my account →' : "let's go! →";
-  $('auth-title').textContent = signup ? 'make a new account 🌟' : 'log in to play & chat 🌈';
-  $('auth-sub').textContent = signup ? 'pick a name and a secret 4-number code' : 'use your name & 4-number code';
-  $('login-error').hidden = true;
-}
-
-// Show a login error, optionally with a one-tap "make a new account" button
-// that flips the form to sign-up (carrying the name they already typed).
-function showLoginError(msg, offerSignup) {
+function showLoginError(msg) {
   const errEl = $('login-error');
-  errEl.innerHTML =
-    `<span>${esc(msg)}</span>` +
-    (offerSignup ? ` <button type="button" class="login-error-action" id="login-go-signup">make a new account →</button>` : '');
+  errEl.textContent = msg;
   errEl.hidden = false;
-  const go = document.getElementById('login-go-signup');
-  if (go) go.addEventListener('click', () => { setAuthMode('signup'); $('login-code').focus(); });
 }
 
 function wire() {
-  document.querySelectorAll('.auth-tab').forEach((tab) =>
-    tab.addEventListener('click', () => setAuthMode(tab.getAttribute('data-mode')))
-  );
-
   const navOut = document.getElementById('nav-signout-btn');
   if (navOut) navOut.addEventListener('click', signOutAndRefresh);
 
@@ -652,24 +621,17 @@ function wire() {
       const orig = btn.textContent;
       const name = $('login-username').value;
       const code = $('login-code').value;
-      if (authMode === 'signup' && $('login-code2').value.trim() !== code.trim()) {
-        errEl.textContent = 'Your two codes are different — type the same 4 numbers twice.';
-        errEl.hidden = false;
-        return;
-      }
       btn.disabled = true;
       btn.textContent = 'one sec…';
       try {
-        const prof = authMode === 'signup' ? await createAccount(name, code) : await logIn(name, code);
+        const prof = await signInOrCreate(name, code);
         $('login-username').value = '';
         $('login-code').value = '';
-        $('login-code2').value = '';
         await showSignedIn(prof);
       } catch (err) {
-        showLoginError(err.message || 'Hmm, that didn’t work.', !!err.offerSignup);
+        showLoginError(err.message || 'Hmm, that didn’t work.');
         // Keep the name, clear just the code so a mistyped code is one quick retry.
         $('login-code').value = '';
-        $('login-code2').value = '';
         $('login-code').focus();
       } finally {
         btn.disabled = false;
